@@ -1,0 +1,72 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap'); */
+@import "tailwindcss";
+
+
+@theme {
+  /* Colors */
+  --color-primary-fixed: #b7eaff;
+  --color-primary-container: #00d1ff;
+  --color-outline-variant: #3c494e;
+  --color-surface-tint: #4cd6ff;
+  --color-on-primary-fixed-variant: #004e60;
+  --color-error-container: #93000a;
+  --color-on-secondary-fixed-variant: #92001f;
+  --color-on-surface-variant: #bbc9cf;
+  --color-surface-variant: #353436;
+  --color-surface-container-high: #2a2a2b;
+  --color-secondary-fixed-dim: #ffb3b2;
+  --color-tertiary-fixed: #ffdea8;
+  --color-surface-bright: #3a393a;
+  --color-on-tertiary: #412d00;
+  --color-secondary-container: #ff525d;
+  --color-surface-container-lowest: #0e0e0f;
+  --color-background: #131314;
+  --color-on-secondary: #680013;
+  --color-on-error: #690005;
+  --color-on-secondary-container: #5b000f;
+  --color-surface-container-low: #1c1b1c;
+  --color-on-primary-container: #00566a;
+  --color-surface-container: #201f20;
+  --color-inverse-primary: #00677f;
+  --color-on-primary: #003543;
+  --color-tertiary: #ffd690;
+  --color-primary: #a4e6ff;
+  --color-error: #ffb4ab;
+  --color-surface: #131314;
+  --color-on-primary-fixed: #001f28;
+  --color-surface-container-highest: #353436;
+  --color-tertiary-fixed-dim: #ffba20;
+  --color-inverse-surface: #e5e2e3;
+  --color-secondary-fixed: #ffdad9;
+  --color-on-tertiary-fixed-variant: #5e4200;
+  --color-on-background: #e5e2e3;
+  --color-on-secondary-fixed: #410008;
+  --color-tertiary-container: #f9b400;
+  --color-on-surface: #e5e2e3;
+  --color-on-tertiary-container: #684900;
+  --color-on-tertiary-fixed: #271900;
+  --color-inverse-on-surface: #313031;
+  --color-primary-fixed-dim: #4cd6ff;
+  --color-outline: #859399;
+  --color-on-error-container: #ffdad6;
+  --color-secondary: #ffb3b2;
+  --color-surface-dim: #131314;
+
+  /* Fonts */
+  --font-headline: "Newsreader", serif;
+  --font-body: "Manrope", sans-serif;
+  --font-label: "Space Grotesk", monospace;
+
+  /* Radius */
+  --radius: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-full: 9999px;
+}
+
+.perspective-grid {
+  background-image: linear-gradient(to right, rgba(164, 230, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(164, 230, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px; 
+}
