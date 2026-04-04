@@ -30,12 +30,11 @@ const Register = () => {
     };
     try {
       await api.post("/user/register", info);
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Something went wrong");
-    } finally {
       setTimeout(() => {
         router.push("/");
       }, 1000);
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Something went wrong");
     }
 
   }

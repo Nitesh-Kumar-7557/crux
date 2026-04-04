@@ -5,9 +5,6 @@ const config = {
     client_url: process.env.CLIENT_URL,
     db : {
         url: process.env.DB_URL,
-        name: process.env.POSTGRES_DB,
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
     },
     node_env: process.env.NODE_ENV,
     jwt_secret: process.env.JWT_SECRET,
