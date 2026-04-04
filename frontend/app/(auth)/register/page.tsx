@@ -1,4 +1,7 @@
-
+'use client';
+import api from "@/app/axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { DiRuby } from "react-icons/di";
 import { FaBalanceScale } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
@@ -6,6 +9,37 @@ import { LuLockKeyhole, LuUser } from "react-icons/lu";
 import { MdOutlineEmail, MdOutlineVerifiedUser } from "react-icons/md";
 
 const Register = () => {
+
+  const [name,setName] = useState<string>('')
+  const [userName,setUserName] = useState<string>('')
+  const [email,setEmail] = useState<string>('')
+  const [password,setPassword] = useState<string>('')
+
+  const [error, setError] = useState("");
+
+  const router = useRouter();
+
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
+    e.preventDefault();
+    setError("");
+    const info = {
+      name,
+      userName,
+      email,
+      password,
+    };
+    try {
+      await api.post("/user/register", info);
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Something went wrong");
+    } finally {
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    }
+
+  }
+
   return (
     <>
       <main className="grow flex items-center justify-center pt-14 pb-12 px-6">
@@ -23,11 +57,11 @@ const Register = () => {
                 Join the Intellectual Fray
               </h1>
             </div>
-            <form className="space-y-8">
+            <form className="space-y-8" onSubmit={handleSubmit}>
               <div className="space-y-2">
                 <label
                   className="block font-label text-[10px] uppercase tracking-widest text-outline"
-                  htmlFor="email"
+                  htmlFor="name"
                 >
                   Nom de Guerre / Full Name
                 </label>
@@ -37,17 +71,19 @@ const Register = () => {
                   </span>
                   <input
                     className="w-full bg-surface-container-highest border-none text-on-surface py-3 pl-11 pr-4 focus:ring-1 focus:ring-primary placeholder:text-stone-600 transition-all font-body text-sm"
-                    id="email"
+                    id="name"
                     placeholder="Enter Identity..."
                     required={true}
-                    type="email"
+                    type="text"
+                    value={name}
+                    onChange={(e)=> setName(e.currentTarget.value)}
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <label
                   className="block font-label text-[10px] uppercase tracking-widest text-outline"
-                  htmlFor="email"
+                  htmlFor="username"
                 >
                   Unique Identity / Username
                 </label>
@@ -57,10 +93,12 @@ const Register = () => {
                   </span>
                   <input
                     className="w-full bg-surface-container-highest border-none text-on-surface py-3 pl-11 pr-4 focus:ring-1 focus:ring-primary placeholder:text-stone-600 transition-all font-body text-sm"
-                    id="email"
+                    id="username"
                     placeholder="Enter Identity..."
                     required={true}
-                    type="email"
+                    type="text"
+                    value={userName}
+                    onChange={(e)=> setUserName(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -81,6 +119,8 @@ const Register = () => {
                     placeholder="user@crux-protocol.io"
                     required={true}
                     type="email"
+                    value={email}
+                    onChange={(e)=> setEmail(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -103,9 +143,12 @@ const Register = () => {
                     placeholder="••••••••••••"
                     required={true}
                     type="password"
+                    value={password}
+                    onChange={(e)=> setPassword(e.currentTarget.value)}
                   />
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-between">
+                  <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">{error}</p>
                   <a
                     className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
                     href="#"
@@ -117,7 +160,7 @@ const Register = () => {
 
               <div className="pt-6">
                 <button
-                  className="w-full bg-primary text-on-primary py-5 font-label font-bold tracking-[0.2em] text-sm hover:bg-primary-container transition-all flex items-center justify-center gap-3"
+                  className="cursor-pointer w-full bg-primary text-on-primary py-5 font-label font-bold tracking-[0.2em] text-sm hover:bg-primary-container transition-all flex items-center justify-center gap-3"
                   type="submit"
                 >
                   JOIN THE FRAY
@@ -126,6 +169,7 @@ const Register = () => {
                   </span>
                 </button>
               </div>
+
             </form>
             <p className="mt-8 text-outline text-xs font-body">
               By entering the arena, you agree to the{" "}

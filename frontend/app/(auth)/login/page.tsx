@@ -1,14 +1,45 @@
+'use client';
 import { HiOutlineBolt } from "react-icons/hi2";
 import { LuLockKeyhole } from "react-icons/lu";
 import { MdOutlineEmail } from "react-icons/md";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import api from "@/app/axios";
 
 const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
 const Login = () => {
+
+  const [email,setEmail] = useState<string>('')
+  const [password,setPassword] = useState<string>('')
+
+  const [error, setError] = useState("");
+  
+  const router = useRouter();
+
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
+    e.preventDefault();
+    setError("");
+    const info = {
+      email,
+      password,
+    };
+
+    try{
+      await api.post('/user/login', {email, password});
+      setTimeout(()=>{
+        router.push('/');
+      },1000)
+    } catch (err: any){
+      setError(err.response?.data?.error || "Something went wrong")
+    }
+
+  }
+
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
       {/* <!-- Background Technical Layer --> */}
@@ -38,7 +69,7 @@ const Login = () => {
               Enter your credentials to access the fray.
             </p>
           </header>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* <!-- Email Field --> */}
             <div className="space-y-2">
               <label
@@ -57,6 +88,8 @@ const Login = () => {
                   placeholder="user@crux-protocol.io"
                   required={true}
                   type="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.currentTarget.value)}
                 />
               </div>
             </div>
@@ -80,21 +113,24 @@ const Login = () => {
                   placeholder="••••••••••••"
                   required={true}
                   type="password"
+                  value={password}
+                  onChange={(e)=>setPassword(e.currentTarget.value)}
                 />
               </div>
-              <div className="flex justify-end">
-                <a
-                  className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
-                  href="#"
-                >
-                  Forgot Password?
-                </a>
-              </div>
+              <div className="flex justify-between">
+                  <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">{error}</p>
+                  <a
+                    className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
+                    href="#"
+                  >
+                    Forgot Password?
+                  </a>
+                </div>
             </div>
             {/* <!-- Action Button --> */}
             <div className="pt-4">
               <button
-                className="w-full bg-primary text-on-primary py-4 font-label font-bold uppercase tracking-widest hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
+                className="w-full cursor-pointer bg-primary text-on-primary py-4 font-label font-bold uppercase tracking-widest hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
                 type="submit"
               >
                 Enter the Fray
