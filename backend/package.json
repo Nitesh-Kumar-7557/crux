@@ -4,6 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "db:migrate": "tsx src/db/migrate.ts",
+    "start": "npm run db:migrate && node dist/index.js",
     "build": "rimraf dist && npx tsc",
     "dev": "npx tsx watch src/index.ts"
   },

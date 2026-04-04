@@ -1,0 +1,9 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(20) DEFAULT 'user',
+    name VARCHAR(20) NOT NULL,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    hashed_password TEXT NOT NULL,
+    avatar_url TEXT
+);
