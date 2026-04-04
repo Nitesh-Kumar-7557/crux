@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import config from './config/index.js';
+import userRoutes from './routes/user.route.js';
 
 
 
@@ -18,6 +19,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 
+// routes
+app.use("/user",userRoutes)
 
 
 export default app;

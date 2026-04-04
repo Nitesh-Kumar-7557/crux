@@ -9,6 +9,8 @@ const config = {
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
     },
+    node_env: process.env.NODE_ENV,
+    jwt_secret: process.env.JWT_SECRET,
 }
 
 
