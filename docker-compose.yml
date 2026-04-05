@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     ports:
-      - "4001:8000"
+      - "4001:4001"
     env_file:
       - ./backend/.env
 
@@ -27,6 +27,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+      - NEXT_PUBLIC_API_URL=https://api.crux.kumarnitesh.in
     container_name: frontend
     ports:
       - "3001:3000"
