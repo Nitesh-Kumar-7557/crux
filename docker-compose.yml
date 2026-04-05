@@ -8,27 +8,39 @@ services:
       - ./backend/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U crux -d cruxdb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend:
     depends_on:
-       - db
+      db:
+        condition: service_healthy
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
-    ports:
-      - "4001:4001"
     env_file:
       - ./backend/.env
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:4001/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   frontend:
     depends_on:
-       - backend
+      backend:
+        condition: service_healthy
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-      - NEXT_PUBLIC_API_URL=https://api.crux.kumarnitesh.in
+        - NEXT_PUBLIC_API_URL=/api
     container_name: frontend
     ports:
       - "3001:3000"

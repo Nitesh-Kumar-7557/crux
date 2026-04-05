@@ -7,16 +7,13 @@ WORKDIR /home/build
 
 COPY package*.json .
 COPY tsconfig.json .
+COPY next.config* .
+COPY postcss.config* .
 
 RUN npm install
 
 COPY app/ app/
 COPY public/ public/
-COPY next.config* .
-COPY postcss.config* .
-
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 RUN npm run build
 
@@ -30,7 +27,9 @@ COPY --from=builder /home/build/.next/standalone .
 COPY --from=builder /home/build/.next/static .next/static/
 COPY --from=builder /home/build/public public/
 
+ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
 
 CMD ["node","server.js"]
 

@@ -20,6 +20,7 @@ app.use(cookieParser())
 
 
 // routes
+app.get("/health", (req, res) => res.sendStatus(200))
 app.use("/user",userRoutes)
 
 
