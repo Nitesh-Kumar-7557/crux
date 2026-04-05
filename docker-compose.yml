@@ -6,10 +6,32 @@ services:
     container_name: crux-db
     env_file:
       - ./backend/.env
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    depends_on:
+       - db
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "4001:8000"
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    depends_on:
+       - backend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3001:3000"
+    env_file:
+      - ./frontend/.env
 
 volumes:
   postgres_data:
