@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import config from './config/index.js';
 import userRoutes from './routes/user.route.js';
+import statementRoutes from './routes/statement.route.js';
 
 
 
@@ -22,6 +23,7 @@ app.use(cookieParser())
 // routes
 app.get("/health", (req, res) => res.sendStatus(200))
 app.use("/user",userRoutes)
+app.use("/statement",statementRoutes)
 
 
 export default app;

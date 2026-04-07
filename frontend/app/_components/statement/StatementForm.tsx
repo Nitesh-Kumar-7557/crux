@@ -5,15 +5,37 @@ import { MdEditNote, MdFilterList, MdOutlineAnalytics, MdSensors } from "react-i
 
 import { Newsreader } from "next/font/google";
 import { TbGavel } from "react-icons/tb";
+import { useUser } from "@/app/_hooks/useUser";
+import { useRouter } from "next/navigation";
+import api from "@/app/axios";
 const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
 const StatementForm = ({ domains }: { domains: DomainClassification }) => {
-    const [text,setText] = useState('')
+  
+  const router = useRouter();
+  const user = useUser();
+  if(!user){
+    router.push('/login')
+  }
+
+  const [text,setText] = useState('')
+  const [selectedDomain,setSelectedDomain] = useState('AI')
+
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
+    e.preventDefault();
+    await api.post('/statement',{
+      user_id: user?.id,
+      content: text,
+      domain: selectedDomain
+    })
+    router.push('/');
+  }
+
   return (
     <div className="bg-surface-container-low p-8 relative overflow-hidden">
-      <form className="space-y-8 relative z-10">
+      <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
         {/* <!-- Category Selection --> */}
         <div className="space-y-3">
           <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
@@ -23,17 +45,12 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             Domain Classification
           </label>
           <div className=" flex flex-wrap gap-2">
-            <button
-              className="cursor-pointer border border-primary px-4 py-2 font-label text-xs uppercase text-primary bg-primary/5 transition-colors"
-              type="button"
-            >
-              Auto
-            </button>
             {domains.map((e, i) => (
               <button
                 key={i}
-                className="cursor-pointer border border-outline-variant px-4 py-2 font-label text-xs uppercase hover:border-primary hover:text-primary transition-colors bg-surface-container"
+                className={`${selectedDomain === e ? 'border-primary text-primary bg-primary/5':'border-outline-variant bg-surface-container'} cursor-pointer border px-4 py-2 font-label text-xs uppercase hover:border-primary hover:text-primary transition-colors `}
                 type="button"
+                onClick={()=>setSelectedDomain(e)}
               >
                 {e}
               </button>
@@ -51,7 +68,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             placeholder="State your thesis clearly and without ambiguity..." value={text} onChange={(e)=> setText(e.target.value)}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
-            <span>Minimum 140 characters for AI validation</span>
+            <span>Minimum 80 characters for AI validation</span>
             <span>{text.length} / 1200</span>
           </div>
         </div>
