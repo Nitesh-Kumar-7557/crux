@@ -44,8 +44,6 @@ services:
     container_name: frontend
     ports:
       - "3001:3000"
-    env_file:
-      - ./frontend/.env
 
   pgadmin:
     image: dpage/pgadmin4

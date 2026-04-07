@@ -47,7 +47,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             The Statement
           </label>
           <textarea
-            className={`w-full bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-700 text-on-surface resize-none`}
+            className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-700 text-on-surface resize-none`}
             placeholder="State your thesis clearly and without ambiguity..." value={text} onChange={(e)=> setText(e.target.value)}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
@@ -73,7 +73,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             </span>
           </div>
           <button
-            className="w-full md:w-auto bg-primary text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center gap-3"
+            className="cursor-pointer w-full md:w-auto bg-primary text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center gap-3"
             type="submit"
           >
             Broadcast Statement

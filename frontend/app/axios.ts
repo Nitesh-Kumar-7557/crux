@@ -23,7 +23,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = (await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/refresh`,
+          `/api/user/refresh`,
           {},
           {
             withCredentials: true,

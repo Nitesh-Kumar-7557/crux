@@ -5,8 +5,9 @@ import crypto from "crypto";
 
 interface TokenPayload {
   id: number;
-  email: string;
   role: string;
+  username: string;
+  email: string;
 }
 
 export function createAccessToken(payload: TokenPayload) {
@@ -40,7 +41,7 @@ export async function deleteRefreshTokenFromDB(token: string) {
 export async function findRefreshToken(token: string) {
   const { rows } = await pool.query(
     `
-            SELECT rt.token, u.email, u.role
+            SELECT u.id,u.role,u.username,u.email
             FROM refresh_tokens rt
             JOIN users u ON rt.user_id = u.id
             WHERE rt.token = $1

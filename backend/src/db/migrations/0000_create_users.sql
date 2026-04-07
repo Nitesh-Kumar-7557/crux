@@ -4,6 +4,5 @@ CREATE TABLE users (
     name VARCHAR(20) NOT NULL,
     username VARCHAR(20) UNIQUE NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
-    hashed_password TEXT NOT NULL,
-    avatar_url TEXT
+    hashed_password TEXT NOT NULL
 );

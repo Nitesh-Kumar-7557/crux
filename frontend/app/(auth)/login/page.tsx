@@ -30,7 +30,8 @@ const Login = () => {
     };
 
     try{
-      await api.post('/user/login', {email, password});
+      const response = await api.post("/user/login", info);
+      localStorage.setItem("access_token", response.data.accessToken);
       setTimeout(()=>{
         router.push('/');
       },1000)

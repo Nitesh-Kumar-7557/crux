@@ -29,7 +29,8 @@ const Register = () => {
       password,
     };
     try {
-      await api.post("/user/register", info);
+      const response = await api.post("/user/register", info);
+      localStorage.setItem("access_token", response.data.accessToken);
       setTimeout(() => {
         router.push("/");
       }, 1000);

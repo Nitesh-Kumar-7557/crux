@@ -47,7 +47,7 @@ export async function addNewUser(req: Request, res: Response) {
     const { rows } = await pool.query(
       `INSERT INTO users(username, name, email, hashed_password) VALUES (
                 $1,$2,$3,$4
-          ) RETURNING id, name, username, email, role`,
+          ) RETURNING id, role, username, email `,
       [userName, name, email, hashedPassword],
     );
 
@@ -60,8 +60,7 @@ export async function addNewUser(req: Request, res: Response) {
 
     res.cookie("refresh_token", refreshToken, cookieOptions);
     res.status(201).json({
-      accessToken: accessToken,
-      user: user,
+      accessToken: accessToken
     });
   } catch (err) {
     console.error(err);
@@ -81,7 +80,7 @@ export async function loginUser(req: Request, res: Response) {
 
   try {
     const { rows } = await pool.query(
-      "SELECT * FROM users WHERE email = $1 ;",
+      "SELECT id, role, username, email, hashed_password FROM users WHERE email = $1 ;",
       [email],
     );
 
@@ -90,14 +89,27 @@ export async function loginUser(req: Request, res: Response) {
       return res.status(400).json({ error: "Email not found!" });
     }
 
-    const user = rows[0];
+    const user: {
+      id: number;
+      role: string;
+      username: string;
+      email: string;
+      hashed_password: string;
+    } = rows[0];
 
     const valid = await bcrypt.compare(password, user.hashed_password);
     if (!valid) {
       return res.status(400).json({ error: "Wrong Password!" });
     }
 
-    const accessToken = createAccessToken(user);
+    const payloadData = {
+      id: user.id,
+      role: user.role,
+      username: user.username,
+      email: user.email,
+    }
+
+    const accessToken = createAccessToken(payloadData);
     const refreshToken = createRefreshToken();
 
     await saveRefreshTokenToDB(user.id, refreshToken);
@@ -105,7 +117,6 @@ export async function loginUser(req: Request, res: Response) {
     res.cookie("refresh_token", refreshToken, cookieOptions);
     res.json({
       accessToken: accessToken,
-      user: user, // Password is also going fix this!
     });
   } catch (err) {
     console.error(err);
@@ -132,8 +143,9 @@ export async function generateNewAccess(req: Request, res: Response) {
 
     const newAccessToken = createAccessToken({
       id: tokenData.user_id,
-      email: tokenData.email,
       role: tokenData.role,
+      username: tokenData.username,
+      email: tokenData.email,
     });
 
     res.json({ access_token: newAccessToken });
@@ -160,7 +172,7 @@ export async function logoutUser(req: Request, res: Response) {
 export async function getUserInfo(req: Request, res: Response) {
   try {
     const { rows } = await pool.query(`
-        SELECT id, name, username, role, points, avatar_url FROM users WHERE id = $1; 
+        SELECT id, name, username, role FROM users WHERE id = $1; 
       `,[req.user!.id])
     res.json({user: rows[0]})
   } catch(err){
