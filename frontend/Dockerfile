@@ -1,7 +1,7 @@
-FROM node:24-alpine as base
+FROM node:24-alpine AS base
 
 # Stage 1
-FROM base as builder
+FROM base AS builder
 
 WORKDIR /home/build
 
@@ -19,7 +19,7 @@ RUN npm run build
 
 
 # Stage 2
-FROM base as runner
+FROM base AS runner
 
 WORKDIR /home/app
 

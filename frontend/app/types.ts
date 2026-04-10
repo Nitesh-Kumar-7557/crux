@@ -1,5 +1,7 @@
 
 export interface LiveArenaCardProps {
+    username: string;
+    domain: string;
     title: string;
     argumentNum: number;
     aiMatchQuality: 'low' | 'medium' | 'high';
@@ -12,12 +14,12 @@ export type LiveArenaCardData = LiveArenaCardProps[]
 
 
 export interface TrendingCardProps {
-    category: string;
+    username: string;
+    domain: string;
     title: string;
-    affermativeScore: number;
-    negativeScore: number;
-    activeMinds: number;
-    argumentId: string;
+    affirmativescore: number;
+    negativescore: number;
+    argumentid: number;
 }
 export type TrendingCardData = TrendingCardProps[]
 

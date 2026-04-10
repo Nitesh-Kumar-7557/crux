@@ -11,39 +11,12 @@ import { LiveArenaCardData, TrendingCardData } from "@/app/types";
 
 const tabList = ["trending", "newest", "high stakes"];
 
-// dummy Data
-const liveArenaCardData: LiveArenaCardData = [
-  {
-    title: "AI is the final evolution of human artistry.",
-    argumentNum: 243,
-    aiMatchQuality: 'high',
-    affermativeScore: 20,
-    negativeScore: 80,
-    numOfUsers: 18,
-    argumentId: 'CRX-1108-A'
-  }
-]
-const trendingCardData: TrendingCardData = [
-  {
-    category: 'Political Science',
-    title: 'Decentralized governance is the only cure for institutional rot.',
-    affermativeScore: 70,
-    negativeScore: 30,
-    activeMinds: 89,
-    argumentId: "CRX-1010-B"
-  },
-  {
-    category: 'Political Science',
-    title: 'Decentralized governance is the only cure for institutional rot.',
-    affermativeScore: 70,
-    negativeScore: 30,
-    activeMinds: 89,
-    argumentId: "CRX-1020-A"
-  },
-]
 
-const ActiveArguments = () => {
-  const [activeTab, setActiveTab] = useState("trending");
+// const ActiveArguments = async() => {
+  const ActiveArguments = ({liveArenaCardData,trendingCardData}:{liveArenaCardData: LiveArenaCardData; trendingCardData: TrendingCardData;}) => {
+    const [activeTab, setActiveTab] = useState("trending");
+    
+
   const changeActive = (e: string) => {
     setActiveTab(e);
   };
@@ -57,11 +30,11 @@ const ActiveArguments = () => {
       {activeTab === "trending" && (
         <div>
           {liveArenaCardData.map((e,i)=>(
-            <LiveArenaCard key={i} title={e.title} argumentNum={e.argumentNum} aiMatchQuality={e.aiMatchQuality} affermativeScore={e.affermativeScore} negativeScore={e.negativeScore} numOfUsers={e.numOfUsers} argumentId={e.argumentId}/>
+            <LiveArenaCard key={i} domain={e.domain} username={e.username} title={e.title} argumentNum={e.argumentNum} aiMatchQuality={e.aiMatchQuality} affermativeScore={e.affermativeScore} negativeScore={e.negativeScore} numOfUsers={e.numOfUsers} argumentId={e.argumentId}/>
           ))}
           <div className="mb-5 md:flex md:flex-wrap md:justify-between">
-            {trendingCardData.map((e,i)=>(
-              <TrendingCard key={i} category={e.category} title={e.title} affermativeScore={e.affermativeScore} negativeScore={e.negativeScore} activeMinds={e.activeMinds} argumentId={e.argumentId} />
+            {trendingCardData.map((e,i)=> i !== 0 && (
+              <TrendingCard key={i} username={e.username} domain={e.domain} title={e.title} affirmativescore={e.affirmativescore} negativescore={e.negativescore} argumentid={e.argumentid} />
             ))}
           </div>
           <ThesisCard />

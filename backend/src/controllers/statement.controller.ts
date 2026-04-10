@@ -15,5 +15,14 @@ export async function addNewStatement(req: Request, res: Response) {
         `,
     [data.user_id, data.content, data.domain],
   );
+
+  // Temporary
+  await pool.query(
+    `
+            INSERT INTO arguments (user_id, content, content_keyword, statement_id) VALUES ($1,$2,$3,$4);
+        `,
+    [data.user_id, data.content, "legal personhood", rows[0].id],
+  );
+
   return res.status(200).json({message: `Statement with id: ${rows[0].id} added successfully!`})
 }

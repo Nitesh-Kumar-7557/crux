@@ -8,7 +8,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const LiveArenaCard = ({title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: LiveArenaCardProps) => {
+const LiveArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: LiveArenaCardProps) => {
   return (
     <div className="bg-surface-container-low mt-5 p-8 pb-4 border-l-2 border-primary group hover:bg-surface-container transition-colors relative overflow-hidden">
       <div className="absolute -top-2.5 right-0 p-4">
@@ -16,6 +16,14 @@ const LiveArenaCard = ({title,argumentNum,aiMatchQuality,affermativeScore,negati
           Live Arena
         </span>
       </div>
+      <div className="flex items-center gap-3 mb-6">
+        <img alt="Aurelius_X" className="w-8 h-8 border border-outline-variant/30 grayscale hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY5Anp_D4xW6pJE78a2afpLChi3n-4n80CePZRl9k3_YW9rmmoew2pl6257BuP4_E8hZqh9u13uGYgZXQFhwsbwoQwM0JtnQaaLJBih9wYDfaGqm09iQ_YE538pVkDQcQ5bJaEJzREFPAXwM7dkiihuigd-a6g_2sXBdnGbZgtCFBNZD_NE9zLmWe5uqoqow7VHtx5Yp3eQL-KTBAZ4Pfku3J0sGV0VTFF9GDeJ3NFN_V0u5U6ybXJIEN8rTU4PrUeXh2MfvHK2bL6"/>
+        <div className="flex flex-col">
+        <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em]">Proposed By</span>
+        <span className="font-body text-xs font-bold text-on-surface">{username}</span>
+        </div>
+      </div>
+      <span className="font-label text-[10px] text-tertiary uppercase tracking-widest mb-3 block">{domain}</span>
       <h2
         className={`${newsreader.className} text-4xl leading-tight mb-4 transition-colors`}
       >

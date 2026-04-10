@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://backend:4001/:path*", // internal docker service name
+        // destination: "http://backend:4001/:path*", // for production
+        destination: "http://localhost:8000/:path*",  // for development
       },
     ];
   },

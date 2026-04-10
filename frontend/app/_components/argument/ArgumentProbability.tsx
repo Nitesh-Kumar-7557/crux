@@ -9,7 +9,7 @@ const ArgumentProbability = ({argumentHeaderData}:{argumentHeaderData: ArgumentH
         </span>
         <div className="absolute inset-0 bg-linear-to-r from-white/10 to-transparent"></div>
       </div>
-      <div className="absolute left-[58%] top-0 bottom-0 w-0.5 bg-white z-20 shadow-[0_0_15px_rgba(255,255,255,0.8)]"></div>
+      <div className="absolute top-0 bottom-0 w-0.5 bg-white z-20 shadow-[0_0_15px_rgba(255,255,255,0.8)]" style={{left: `${argumentHeaderData.affirmativeProbability}`}}></div>
       <div className="h-full bg-secondary flex items-center justify-end px-6 transition-all duration-700 relative overflow-hidden" style={{width: `${argumentHeaderData.negativeProbability}%`}}>
         <span className="font-label text-sm text-on-secondary font-bold relative z-10">
           NEGATIVE {argumentHeaderData.negativeProbability}%

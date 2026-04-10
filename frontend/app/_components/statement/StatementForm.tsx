@@ -1,6 +1,6 @@
 'use client';
 import { DomainClassification } from "@/app/statement/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdEditNote, MdFilterList, MdOutlineAnalytics, MdSensors } from "react-icons/md";
 
 import { Newsreader } from "next/font/google";
@@ -16,12 +16,17 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   
   const router = useRouter();
   const user = useUser();
-  if(!user){
-    router.push('/login')
-  }
 
   const [text,setText] = useState('')
   const [selectedDomain,setSelectedDomain] = useState('AI')
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) return null;
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
     e.preventDefault();
