@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import ActiveArguments from "./_components/arena/ActiveArguments";
 import ArenaSidebar from "./_components/arena/ArenaSidebar";
 import api from "./axios";

@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const serverApi = axios.create({
-  // baseURL: "http://backend:4001",    // For production
-  baseURL: "http://localhost:8000",     // For development
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
