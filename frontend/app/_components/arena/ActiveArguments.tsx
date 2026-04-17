@@ -67,7 +67,7 @@ const ActiveArguments = ({
             <ThesisCard />
           </div>
         ) : (
-          <div>No Data!</div>
+          <div><ThesisCard /></div>
         ))}
       {activeTab === "newest" && <NewestTab />}
       {activeTab === "high stakes" && <HighStakesTab />}

@@ -7,6 +7,9 @@ export async function getActiveCardData(req: Request, res: Response){
                 SELECT id, user_id, content, statement_id, affirmative, negative
                 FROM arguments LIMIT 1;
             `)
+        if(argument.rows.length === 0){
+            return res.status(200).json({})
+        }
         const domain = await pool.query(`
                 SELECT domain
                 FROM statements WHERE id = $1;
@@ -28,7 +31,7 @@ export async function getActiveCardData(req: Request, res: Response){
             content: argument.rows[0].content,
             affirmative: argument.rows[0].affirmative,
             negative: argument.rows[0].negative,
-            count_comments: forComments.rows[0] + againstComments.rows[0],
+            count_comments: parseInt(forComments.rows[0].count) + parseInt(againstComments.rows[0].count),
         })
     }
     catch(err){
@@ -52,6 +55,9 @@ export async function getTrendingCardData(req: Request, res: Response){
                 JOIN users u ON a.user_id = u.id
                 LIMIT 7;
             `)
+        if(argument.rows.length === 0){
+            return res.status(200).json({})
+        }
     
         res.status(200).json(argument.rows)
     }
