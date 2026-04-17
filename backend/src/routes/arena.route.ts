@@ -3,7 +3,7 @@ import { getActiveCardData, getTrendingCardData } from "../controllers/arena.con
 
 const arenaRoutes = Router();
 
-arenaRoutes.get('/active/live',getActiveCardData);
+arenaRoutes.get('/active/main',getActiveCardData);
 arenaRoutes.get('/active/trending',getTrendingCardData);
 
 export default arenaRoutes;

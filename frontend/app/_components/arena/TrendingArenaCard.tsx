@@ -1,4 +1,4 @@
-import { TrendingCardProps } from "@/app/types";
+import { TrendingArenaCardProps } from "@/app/types";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
 
@@ -6,14 +6,14 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const TrendingCard = ({
+const TrendingArenaCard = ({
   username,
   domain,
   title,
   affirmativescore,
   negativescore,
   argumentid,
-}: TrendingCardProps) => {
+}: TrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low cursor-pointer md:w-[49%] mt-5 p-6 border-l-2 border-outline-variant/30 hover:border-primary transition-all">
       <Link className="flex flex-col justify-between h-full" href={`/argument/CRX-${argumentid}-A`}>
@@ -64,4 +64,4 @@ const TrendingCard = ({
   );
 };
 
-export default TrendingCard;
+export default TrendingArenaCard;

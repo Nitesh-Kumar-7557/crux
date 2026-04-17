@@ -1,4 +1,4 @@
-import { LiveArenaCardProps } from "@/app/types";
+import { MainTrendingArenaCardProps } from "@/app/types";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
 import { GoVerified } from "react-icons/go";
@@ -8,7 +8,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const LiveArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: LiveArenaCardProps) => {
+const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: MainTrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low mt-5 p-8 pb-4 border-l-2 border-primary group hover:bg-surface-container transition-colors relative overflow-hidden">
       <div className="absolute -top-2.5 right-0 p-4">
@@ -76,4 +76,4 @@ const LiveArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,afferma
   );
 };
 
-export default LiveArenaCard;
+export default MainTrendingArenaCard;

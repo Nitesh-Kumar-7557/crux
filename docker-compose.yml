@@ -41,9 +41,8 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=/api
+        - SERVER_API_URL=http://backend:4001
     container_name: frontend
-    environment:
-      - NEXT_PUBLIC_API_URL=http://backend:4001
     ports:
       - "3001:3000"
 

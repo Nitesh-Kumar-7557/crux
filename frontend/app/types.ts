@@ -1,5 +1,5 @@
 
-export interface LiveArenaCardProps {
+export interface MainTrendingArenaCardProps {
     username: string;
     domain: string;
     title: string;
@@ -10,10 +10,10 @@ export interface LiveArenaCardProps {
     numOfUsers: number;
     argumentId: string;
 }
-export type LiveArenaCardData = LiveArenaCardProps[]
+export type MainTrendingArenaCardData = MainTrendingArenaCardProps[]
 
 
-export interface TrendingCardProps {
+export interface TrendingArenaCardProps {
     username: string;
     domain: string;
     title: string;
@@ -21,7 +21,7 @@ export interface TrendingCardProps {
     negativescore: number;
     argumentid: number;
 }
-export type TrendingCardData = TrendingCardProps[]
+export type TrendingArenaCardData = TrendingArenaCardProps[]
 
 
 export interface TrendingTopicsCardProps {

@@ -1,38 +1,65 @@
 export const dynamic = "force-dynamic";
 import ActiveArguments from "./_components/arena/ActiveArguments";
 import ArenaSidebar from "./_components/arena/ArenaSidebar";
-import api from "./axios";
 import serverApi from "./axios.server";
-import { LiveArenaCardData, TrendingCardData } from "./types";
+import { MainTrendingArenaCardData, TrendingArenaCardData } from "./types";
+
+const isNonEmptyObject = (value: unknown): value is Record<string, unknown> => {
+  return (
+    !!value &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    Object.keys(value).length > 0
+  );
+};
+
+const toTrendingCard = (item: Record<string, unknown>) => ({
+  username: String(item.username ?? ""),
+  domain: String(item.domain ?? ""),
+  title: String(item.title ?? ""),
+  affirmativescore: Number(item.affirmativescore ?? item.affirmativeScore ?? 0),
+  negativescore: Number(item.negativescore ?? item.negativeScore ?? 0),
+  argumentid: Number(item.argumentid ?? item.argumentId ?? 0),
+});
 
 const Home = async () => {
-  // dummy Data
-  const {data} = await serverApi.get('/arena/active/live');
-  const trending = await serverApi.get('/arena/active/trending');
-  console.log(trending.data)
+  const mainResponse = await serverApi.get("/arena/active/main");
+  const trendingResponse = await serverApi.get("/arena/active/trending");
 
-  const liveArenaCardData: LiveArenaCardData = [
-    {
-      username: data.username,
-      domain: data.domain,
-      title: data.content,
-      argumentNum: 243,
-      aiMatchQuality: "high",
-      affermativeScore: data.affirmative,
-      negativeScore: data.negative,
-      numOfUsers: 18,
-      argumentId: `CRX-${data.argumentId}-A`,
-    },
-  ];
+  const mainPayload = mainResponse.data;
+  const trendingPayload = trendingResponse.data;
 
-  const trendingCardData: TrendingCardData = trending.data;
+  const mainTrendingArenaCardData: MainTrendingArenaCardData =
+    isNonEmptyObject(mainPayload)
+      ? [
+      {
+        username: String(mainPayload.username ?? ""),
+        domain: String(mainPayload.domain ?? ""),
+        title: String(mainPayload.content ?? ""),
+        argumentNum: 243,
+        aiMatchQuality: "high",
+        affermativeScore: Number(mainPayload.affirmative ?? 0),
+        negativeScore: Number(mainPayload.negative ?? 0),
+        numOfUsers: 18,
+        argumentId: mainPayload.argumentId
+          ? `CRX-${mainPayload.argumentId}-A`
+          : "",
+      },
+    ]
+      : [];
+
+  const trendingArenaCardData: TrendingArenaCardData = Array.isArray(
+    trendingPayload,
+  )
+    ? trendingPayload.map((item) => toTrendingCard(item ?? {}))
+    : [];
 
   return (
     <div className="px-8 py-6 flex flex-col md:gap-10 md:flex-row">
       <div className="md:w-[70%]">
         <ActiveArguments
-          liveArenaCardData={liveArenaCardData}
-          trendingCardData={trendingCardData}
+          mainTrendingArenaCardData={mainTrendingArenaCardData}
+          trendingArenaCardData={trendingArenaCardData}
         />
       </div>
       <ArenaSidebar />

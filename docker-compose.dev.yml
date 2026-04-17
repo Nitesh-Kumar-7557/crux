@@ -1,11 +1,11 @@
 
 # docker compose -f docker-compose.dev.yml up
 
-name: crux
+name: crux-dev
 services:
   db:
     image: postgres:17.4
-    container_name: crux-db
+    container_name: crux-dev-db
     env_file:
       - ./backend/.env
     ports:
@@ -25,7 +25,7 @@ services:
     env_file:
       - ./pgadmin.env
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       db:
         condition: service_healthy
