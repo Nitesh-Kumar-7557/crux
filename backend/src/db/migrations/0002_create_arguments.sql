@@ -6,6 +6,5 @@ CREATE TABLE arguments (
     statement_id INT NOT NULL,
     affirmative INT DEFAULT 50,
     negative INT DEFAULT 50,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (statement_id) REFERENCES statements(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )

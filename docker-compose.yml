@@ -39,9 +39,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        - NEXT_PUBLIC_API_URL=/api
-        - SERVER_API_URL=http://backend:4001
+    env_file:
+      - ./frontend/.env
     container_name: frontend
     ports:
       - "3001:3000"

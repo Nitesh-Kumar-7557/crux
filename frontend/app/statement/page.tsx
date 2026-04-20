@@ -6,7 +6,7 @@ import { DomainClassification } from "./types";
 
 
 // Dummy Data
-const domains: DomainClassification = ['Geopolitics','AI','Technology','Science']
+const domains: DomainClassification = ['AI','Geopolitics','Technology','Science','Other']
 
 const page = () => {
   return (

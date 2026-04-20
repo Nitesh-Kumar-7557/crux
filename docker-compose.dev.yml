@@ -19,6 +19,28 @@ services:
       retries: 5
       start_period: 10s
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_dev_data:/root/.ollama
+    env_file:
+      - ./ollama/ollama.env
+    restart: unless-stopped
+
+  ollama-init:
+    image: curlimages/curl:latest
+    depends_on:
+      - ollama
+    restart: "no"
+    volumes:
+      - ./ollama:/modelfiles
+    env_file:
+      - ./ollama/ollama.env
+    entrypoint: sh /modelfiles/init.sh
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: dev-pgadmin
@@ -35,3 +57,4 @@ services:
 volumes:
   postgres_dev_data:
   pgadmin_dev_data:
+  ollama_dev_data:

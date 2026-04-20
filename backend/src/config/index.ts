@@ -8,6 +8,7 @@ const config = {
     },
     node_env: process.env.NODE_ENV,
     jwt_secret: process.env.JWT_SECRET,
+    ollama_base_url: process.env.OLLAMA_BASE_URL,
 }
 
 
