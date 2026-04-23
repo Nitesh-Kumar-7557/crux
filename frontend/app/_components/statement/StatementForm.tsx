@@ -14,6 +14,7 @@ import { TbGavel } from "react-icons/tb";
 import { useUser } from "@/app/_hooks/useUser";
 import { useRouter } from "next/navigation";
 import api from "@/app/axios";
+import { RiRobot3Line } from "react-icons/ri";
 const newsreader = Newsreader({
   subsets: ["latin"],
 });
@@ -37,27 +38,28 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 
   if (!user) return null;
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function checkEligibility(){
     setLoading(true);
     setEligibility('pending');
-    const res = await api.post("/ai/statement", {
+    const {data} = await api.post("/ai/statement", {
       content: text,
       domain: selectedDomain
     })
-    setTimeout(()=>{
-      setEligibility(res.data.eligibility)
-      setFeedback(res.data.feedback)
-      setText(res.data.improved)
-      setLoading(false);
-    },4000)
-    // await api.post("/statement", {
+    console.log(data)
+    setEligibility(data.eligibility)
+    setFeedback(data.feedback)
+    setText(data.improved)
+    setLoading(false);
+  }
+
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+    // await api.post("/argument", {
     //   user_id: user?.id,
     //   content: text,
+    //   content_keyword: 'Nuclear energy',
     //   domain: selectedDomain,
     // });
-    // setEligibility('pass')
-    // setLoading(false);
     // router.push("/");
   }
 
@@ -123,14 +125,20 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
               System Ready for Processing
             </span>
           </div>
-          <button
+          {eligibility === 'pass' && <button
             className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4  transition-all active:scale-95 flex items-center justify-center gap-3`}
             type="submit"
           >
             Broadcast Statement
-            {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><MdSensors /></span>}
-            
-          </button>
+          <span className="material-symbols-outlined text-lg"><MdSensors /></span>
+          </button>}
+          {eligibility !== 'pass' && <button
+            onClick={checkEligibility}
+            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4  transition-all active:scale-95 flex items-center justify-center gap-3`}
+          >
+            Check Eligibility
+            {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><RiRobot3Line /></span>}
+          </button>}
         </div>
       </form>
       { (eligibility) && 

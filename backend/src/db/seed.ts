@@ -46,54 +46,27 @@ const seed = async () => {
 
     const users = usersResult.rows;
     console.log(`✅ Seeded ${users.length} users`);
-
-    // ============================================================
-    // STATEMENTS
-    // ============================================================
-
-    const statementsResult = await client.query(
-      `
-      INSERT INTO "statements" (user_id, content, domain)
-      VALUES
-        ($1,  'AI should be granted legal personhood.',                                      'Technology'),
-        ($2,  'Social media does more harm than good to society.',                           'Society'),
-        ($3,  'Universal basic income is necessary for the future of work.',                 'Economics'),
-        ($4,  'Space exploration is a waste of resources.',                                  'Science'),
-        ($5,  'Cryptocurrency will replace traditional banking systems.',                    'Economics'),
-        ($6,  'Climate change action should be prioritized over economic growth.',           'Environment'),
-        ($7,  'Artificial intelligence will cause more unemployment than it creates.',       'Technology'),
-        ($8,  'Social media platforms should be held liable for misinformation.',            'Society'),
-        ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',        'Environment'),
-        ($10, 'Governments should regulate big tech companies like public utilities.',       'Science')
-      RETURNING id
-    `,
-      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id],
-    );
-
-    const stats = statementsResult.rows;
-    console.log(`✅ Seeded ${stats.length} statements`);
-
+    
     // ============================================================
     // ARGUMENTS
     // ============================================================
     const argumentsResult = await client.query(
       `
-      INSERT INTO "arguments" (user_id, content, content_keyword, statement_id)
+      INSERT INTO "arguments" (user_id, content, content_keyword, domain)
       VALUES
-        ($1,  'AI should be granted legal personhood.',                                      'legal personhood',    $11),
-        ($2,  'Social media does more harm than good to society.',                           'more harm',           $12),
-        ($3,  'Universal basic income is necessary for the future of work.',                 'basic income',        $13),
-        ($4,  'Space exploration is a waste of resources.',                                  'Space exploration',   $14),
-        ($5,  'Cryptocurrency will replace traditional banking systems.',                    'Cryptocurrency',      $15),
-        ($6,  'Climate change action should be prioritized over economic growth.',           'prioritized',         $16),
-        ($7,  'Artificial intelligence will cause more unemployment than it creates.',       'unemployment',        $17),
-        ($8,  'Social media platforms should be held liable for misinformation.',            'misinformation',      $18),
-        ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',        'cleanest solution',   $19),
-        ($10, 'Governments should regulate big tech companies like public utilities.',       'big tech companies',  $20)
+        ($1,  'AI should be granted legal personhood.',                                      'legal personhood',   'technology'),
+        ($2,  'Social media does more harm than good to society.',                           'more harm',          'society'),
+        ($3,  'Universal basic income is necessary for the future of work.',                 'basic income',       'economics'),
+        ($4,  'Space exploration is a waste of resources.',                                  'space exploration',  'science'),
+        ($5,  'Cryptocurrency will replace traditional banking systems.',                    'cryptocurrency',     'finance'),
+        ($6,  'Climate change action should be prioritized over economic growth.',           'prioritized',        'environment'),
+        ($7,  'Artificial intelligence will cause more unemployment than it creates.',       'unemployment',       'technology'),
+        ($8,  'Social media platforms should be held liable for misinformation.',            'misinformation',     'law'),
+        ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',        'cleanest solution',  'energy'),
+        ($10, 'Governments should regulate big tech companies like public utilities.',       'big tech companies', 'policy')
       RETURNING id
     `,
-      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id,
-        stats[0].id, stats[1].id, stats[2].id, stats[3].id, stats[4].id, stats[5].id, stats[6].id, stats[7].id, stats[8].id, stats[9].id]
+      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id]
     );
 
     const args = argumentsResult.rows;

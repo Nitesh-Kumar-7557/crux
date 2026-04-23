@@ -1,59 +1,59 @@
 import type { Request, Response } from "express";
 import { chat } from "../lib/ollama.js";
+import { jsonrepair } from 'jsonrepair';
 
-export async function checkEligibleStatement(req: Request, res: Response){
-    const { content , domain } = req.body;
+export async function checkEligibleStatement(req: Request, res: Response) {
+    const { content, domain } = req.body;
 
 
-    const systemPrompt = `You are a ruthless debate moderator for CRUX — a high-stakes intellectual arena where only the sharpest arguments survive.
-        Your job is to evaluate whether a submitted statement has enough tension, controversy, and debate potential to become a live argument on the platform.
-        You will analyze the statement and respond with a JSON object — nothing else. No explanation outside the JSON.
-        Evaluate across these 4 dimensions:
+    const systemPrompt = `You are a JSON generator. You output only JSON. Nothing else.
 
-        1. ELIGIBILITY — Can this statement sustain two genuinely strong opposing sides?
-        - "pass" if it meets the bar
-        - "fail" if it does not
+        You will evaluate a debate statement and return this exact JSON structure with no deviations:
+        {"eligibility":"pass","improved":"...","feedback":"...","keyword":"..."}
 
-        2. IMPROVED — Rewrite the statement to be sharper, more provocative, and more debatable.
-        - Keep the original intent intact
-        - Make it a strong declarative claim, not a question
-        - Remove vagueness — specificity creates better debates
-        - If the original is already strong, return it as-is
+        STRICT OUTPUT RULES — violating any of these will break the system:
+        - Output ONLY the JSON object. No markdown, no backticks, no thinking, no explanation.
+        - Every key must be double-quoted.
+        - Every value must be a single double-quoted string.
+        - The object must have EXACTLY these 4 keys: eligibility, improved, feedback, keyword.
+        - No duplicate keys. No extra keys. No arrays.
+        - "eligibility" must be exactly "pass" or "fail".
+        - "improved" must be under 15 words.
+        - "feedback" must be under 30 words.
+        - "keyword" must be 1-3 words only.
 
-        3. FEEDBACK — One or two sentences explaining your verdict.
-        - If "pass": what makes it debate-worthy
-        - If "fail": exactly why it failed and what kind of claim would pass
-        - Be direct, even harsh. This is an arena, not a classroom.
-
-        4. KEYWORD — A single short keyword or 2-word phrase for database tagging.
-        - Must reflect the core tension of the statement
-        - Examples: "AI ethics", "democracy", "climate policy", "free speech"
-
-        RULES FOR ELIGIBILITY:
-        - PASS if: statement makes a strong claim, has a clear opposing position, touches on something culturally/politically/ethically contested
-        - FAIL if: statement is a fact (not debatable), too vague to argue against, purely personal opinion with no broader relevance, offensive without intellectual merit, or already a question instead of a claim
-
-        Respond ONLY in this exact JSON format:
-        {
-        "eligibility": "pass" | "fail",
-        "improved": "string",
-        "feedback": "string",
-        "keyword": "string"
-        }`;
+        EVALUATION CRITERIA:
+        - PASS if: strong claim, clear opposing position, culturally/politically/ethically contested.
+        - FAIL if: undisputable fact, too vague, purely personal, offensive without merit, or a question.
+        - "improved": sharper, more provocative rewrite. Keep original intent.
+        - "keyword": reflects the core tension of the statement only.`;
 
     const userPrompt = `Evaluate this statement submitted to the CRUX debate arena:
-        STATEMENT: "${content}"
-        DOMAIN: "${domain}"
-        Judge it. Return only the JSON.`;
-
-    // ask ai to give 4 outputs eligibility, improved, feedback and keyword (for db)
-    const data = await chat('qwen3-fast',[
-        {role: 'system', content: systemPrompt},
-        {role: 'user', content: userPrompt}
-    ])
-
-    console.log(data)
+            STATEMENT: "${content}"
+            DOMAIN: "${domain}"
+            Return only the raw JSON object.`;
 
 
-    res.status(200).json({eligibility: 'pass', improved: content, feedback:'feedback'})
+    try {
+        const raw = await chat([
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+        ])
+
+        
+        const cleaned = raw.replace(/```json|```/g, '').trim();
+
+        const repaired = jsonrepair(cleaned);
+        const parsed = JSON.parse(repaired);
+
+        res.status(200).json({
+            eligibility: parsed.eligibility,
+            improved:    parsed.improved,
+            feedback:    parsed.feedback,
+        })
+    } catch (err) {
+        console.error(err)
+    }
+
+
 }

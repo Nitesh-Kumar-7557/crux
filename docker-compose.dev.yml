@@ -23,12 +23,19 @@ services:
     image: ollama/ollama:latest
     container_name: ollama
     ports:
-      - "11434:11434"
+      - "11435:11434"
     volumes:
       - ollama_dev_data:/root/.ollama
     env_file:
       - ./ollama/ollama.env
     restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
   ollama-init:
     image: curlimages/curl:latest
