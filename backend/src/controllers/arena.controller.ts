@@ -5,7 +5,9 @@ export async function getActiveCardData(req: Request, res: Response){
     try{
         const argument = await pool.query(`
                 SELECT id, user_id, content, domain, affirmative, negative
-                FROM arguments LIMIT 1;
+                FROM arguments a
+                ORDER BY a.id DESC
+                LIMIT 1;
             `)
         if(argument.rows.length === 0){
             return res.status(200).json({})
@@ -48,6 +50,7 @@ export async function getTrendingCardData(req: Request, res: Response){
                     a.id AS argumentId
                 FROM arguments a
                 JOIN users u ON a.user_id = u.id
+                ORDER BY a.id DESC
                 LIMIT 7;
             `)
         if(argument.rows.length === 0){

@@ -25,8 +25,10 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 
   const [text, setText] = useState("");
   const [selectedDomain, setSelectedDomain] = useState("AI");
+  const [keyword, setKeyword] = useState('');
   const [loading, setLoading] = useState(false);
   const [eligibility, setEligibility] = useState('');
+  const [domain, setDomain] = useState('');
   const [feedback, setFeedback] = useState('Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.')
   
 
@@ -36,7 +38,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
     }
   }, [user, router]);
 
-  if (!user) return null;
+  // if (!user) return null;
 
   async function checkEligibility(){
     setLoading(true);
@@ -45,22 +47,23 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
       content: text,
       domain: selectedDomain
     })
-    console.log(data)
     setEligibility(data.eligibility)
+    setKeyword(data.keyword)
     setFeedback(data.feedback)
     setText(data.improved)
+    setDomain(data.domain)
     setLoading(false);
   }
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    // await api.post("/argument", {
-    //   user_id: user?.id,
-    //   content: text,
-    //   content_keyword: 'Nuclear energy',
-    //   domain: selectedDomain,
-    // });
-    // router.push("/");
+    await api.post("/argument", {
+      user_id: user?.id,
+      content: text,
+      content_keyword: keyword,
+      domain: domain,
+    });
+    router.push("/");
   }
 
   return (
@@ -126,7 +129,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             </span>
           </div>
           {eligibility === 'pass' && <button
-            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4  transition-all active:scale-95 flex items-center justify-center gap-3`}
+            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
             type="submit"
           >
             Broadcast Statement
@@ -134,7 +137,8 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           </button>}
           {eligibility !== 'pass' && <button
             onClick={checkEligibility}
-            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4  transition-all active:scale-95 flex items-center justify-center gap-3`}
+            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+            type="button"
           >
             Check Eligibility
             {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><RiRobot3Line /></span>}

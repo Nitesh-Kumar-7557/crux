@@ -15,6 +15,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   // console.log(comments.data.forComments)
   // console.log(comments.data.againstComments)
 
+  const aiAnalysis: [string,string] = [data.data.for_analysis, data.data.against_analysis]
+
   const forCaseComments: any = []
   comments.data.forComments.forEach((e: {username: string; content: string; likes: number;}) =>{
     forCaseComments.push({
@@ -65,7 +67,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <ArgumentHeader
           argumentHeaderData={argumentPageData.argumentHeaderData}
         />
-        <ArgumentArena argumentArenaData={argumentPageData.argumentArenaData} />
+        <ArgumentArena aiAnalysis={aiAnalysis} argumentArenaData={argumentPageData.argumentArenaData} />
 
         <ArgumentInput argumentId={+id}/>
 

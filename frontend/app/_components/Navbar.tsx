@@ -6,7 +6,6 @@ import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
 
 const navLinks = [
   {label: "Arena", href:"/"},
-  {label: "Archive", href:"/archive"},
   {label: "Leaderboard", href:"/leaderboard"},
 ]
 

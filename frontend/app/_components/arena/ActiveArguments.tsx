@@ -1,12 +1,12 @@
 "use client";
 import LiveArenaCard from "./MainTrendingArenaCard";
-import TrendingCard from "./TrendingArenaCard";
 import ThesisCard from "./ThesisCard";
 import ActiveArgumentsNavbar from "./ActiveArgumentsNavbar";
 import { useState } from "react";
 import NewestTab from "./NewestTab";
 import HighStakesTab from "./HighStakesTab";
 import { MainTrendingArenaCardData, TrendingArenaCardData } from "@/app/types";
+import TrendingArenaCard from "./TrendingArenaCard";
 
 const tabList = ["trending", "newest", "high stakes"];
 
@@ -52,7 +52,7 @@ const ActiveArguments = ({
               {trendingArenaCardData.map(
                 (e, i) =>
                   (mainTrendingArenaCardData.length === 0 || i !== 0) && (
-                    <TrendingCard
+                    <TrendingArenaCard
                       key={i}
                       username={e.username}
                       domain={e.domain}

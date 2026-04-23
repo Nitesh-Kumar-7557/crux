@@ -52,21 +52,63 @@ const seed = async () => {
     // ============================================================
     const argumentsResult = await client.query(
       `
-      INSERT INTO "arguments" (user_id, content, content_keyword, domain)
+      INSERT INTO "arguments" (user_id, content, content_keyword, domain, for_analysis, against_analysis)
       VALUES
-        ($1,  'AI should be granted legal personhood.',                                      'legal personhood',   'technology'),
-        ($2,  'Social media does more harm than good to society.',                           'more harm',          'society'),
-        ($3,  'Universal basic income is necessary for the future of work.',                 'basic income',       'economics'),
-        ($4,  'Space exploration is a waste of resources.',                                  'space exploration',  'science'),
-        ($5,  'Cryptocurrency will replace traditional banking systems.',                    'cryptocurrency',     'finance'),
-        ($6,  'Climate change action should be prioritized over economic growth.',           'prioritized',        'environment'),
-        ($7,  'Artificial intelligence will cause more unemployment than it creates.',       'unemployment',       'technology'),
-        ($8,  'Social media platforms should be held liable for misinformation.',            'misinformation',     'law'),
-        ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',        'cleanest solution',  'energy'),
-        ($10, 'Governments should regulate big tech companies like public utilities.',       'big tech companies', 'policy')
+        ($1,  'AI should be granted legal personhood.',
+              'legal personhood', 'technology',
+              'Granting AI legal personhood would enable autonomous systems to enter contracts, own intellectual property, and be held liable for their actions — creating clear accountability frameworks as AI grows more capable and independent.',
+              'AI lacks consciousness, emotions, and moral agency. Legal personhood for AI risks diluting rights meant for humans and living beings, and could be exploited by corporations to shield themselves from liability behind an AI entity.'),
+
+        ($2,  'Social media does more harm than good to society.',
+              'more harm', 'society',
+              'Extensive research links social media to rising anxiety, depression, and loneliness — especially among teens. It amplifies misinformation, breeds addiction through algorithmic design, and has eroded shared civic discourse.',
+              'Social media has democratized information, connected marginalized communities, enabled grassroots activism, and given billions access to global knowledge and economic opportunities that did not exist before.'),
+
+        ($3,  'Universal basic income is necessary for the future of work.',
+              'basic income', 'economics',
+              'As automation displaces jobs at an accelerating pace, UBI provides a safety net that ensures no one is left behind. It empowers workers to retrain, pursue entrepreneurship, and engage in caregiving or creative work without financial ruin.',
+              'UBI is fiscally unsustainable at scale and could fuel inflation. Critics argue it disincentivizes work, crowds out targeted welfare programs, and ignores that automation historically creates more jobs than it destroys.'),
+
+        ($4,  'Space exploration is a waste of resources.',
+              'Space exploration', 'science',
+              'With billions living in poverty, facing climate disasters, or lacking healthcare, diverting trillions toward space exploration reflects skewed priorities. Those funds could directly alleviate suffering on Earth right now.',
+              'Space exploration drives technological innovation — from GPS to medical imaging — while securing humanity''s long-term survival. It also inspires scientific literacy and yields massive returns through spinoff technologies and resource discovery.'),
+
+        ($5,  'Cryptocurrency will replace traditional banking systems.',
+              'Cryptocurrency', 'finance',
+              'Cryptocurrency offers decentralized, borderless, and permissionless financial infrastructure. It can bank the unbanked, reduce remittance costs, and eliminate rent-seeking middlemen — pointing toward a more equitable financial future.',
+              'Crypto remains volatile, energy-intensive, and largely unregulated. Traditional banking offers consumer protections, stability, and trust that crypto has yet to replicate at scale. Most institutional adoption still relies on fiat on-ramps.'),
+
+        ($6,  'Climate change action should be prioritized over economic growth.',
+              'prioritized', 'environment',
+              'The economic cost of inaction on climate change — through floods, droughts, crop failures, and displacement — far exceeds the cost of transitioning to clean energy now. Sustainable growth is only possible on a stable planet.',
+              'Aggressive climate policy without economic safeguards can devastate developing nations still industrializing. Growth funds innovation, and many argue that technological progress — not austerity — is the most effective path to decarbonization.'),
+
+        ($7,  'Artificial intelligence will cause more unemployment than it creates.',
+              'unemployment', 'technology',
+              'Unlike previous automation waves, AI threatens white-collar, creative, and cognitive jobs simultaneously. The speed of displacement will outpace retraining capacity, leaving large portions of the workforce structurally unemployed.',
+              'Every major technological revolution has ultimately created more jobs than it displaced. AI will eliminate repetitive tasks while creating demand for new roles in AI oversight, ethics, maintenance, and adjacent industries we can''t yet predict.'),
+
+        ($8,  'Social media platforms should be held liable for misinformation.',
+              'misinformation', 'law',
+              'Platforms profit from engagement driven by outrage and falsehoods while facing no consequences for the harm caused. Legal liability would create strong incentives to invest seriously in content moderation and algorithmic accountability.',
+              'Holding platforms liable for user-generated content would trigger over-censorship, chilling free speech. It conflates platforms with publishers and could hand governments tools to suppress dissent under the guise of fighting misinformation.'),
+
+        ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',
+              'cleanest solution', 'energy',
+              'Nuclear power produces near-zero carbon emissions per kilowatt-hour, operates regardless of weather, and has the smallest land footprint of any energy source. Modern reactor designs have dramatically reduced safety and waste risks.',
+              'Nuclear plants are enormously expensive and slow to build, making them a poor fit for the urgency of the climate crisis. Waste storage remains unsolved, and accidents like Fukushima demonstrate that even rare failures carry catastrophic consequences.'),
+
+        ($10, 'Governments should regulate big tech companies like public utilities.',
+              'big tech companies', 'policy',
+              'A handful of tech giants control the digital infrastructure billions depend on daily. Treating them as utilities would ensure fair access, prevent anti-competitive behavior, and protect users from exploitation of their data and attention.',
+              'Public utility regulation stifles innovation by reducing the competitive incentives that drove tech''s growth. Heavy-handed regulation risks entrenching incumbents, slowing product development, and shifting power to politically motivated regulators.')
       RETURNING id
-    `,
-      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id]
+      `,
+      [
+        users[0].id, users[1].id, users[2].id, users[3].id, users[4].id,
+        users[5].id, users[6].id, users[7].id, users[8].id, users[9].id
+      ]
     );
 
     const args = argumentsResult.rows;
