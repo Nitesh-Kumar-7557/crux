@@ -1,7 +1,27 @@
+'use client';
 import { UserArgumentCardProps } from "@/app/argument/types";
+import api from "@/app/axios";
+import { useState } from "react";
 import { FiThumbsUp } from "react-icons/fi";
+import { VscThumbsupFilled } from "react-icons/vsc";
 
-const UserArgumentCard = ({side,reputation,username,grade,comment,likes}: UserArgumentCardProps) => {
+const UserArgumentCard = ({side,reputation,username,grade,comment,likes,user_id,comment_id}: UserArgumentCardProps) => {
+  const [likeCount,setLikeCount] = useState(likes)
+  const [liked,setLiked] = useState(false)
+
+  async function handleClick(){
+    setLiked(!liked);
+    if(!liked){
+      setLikeCount(e => e+1);
+      if(user_id){
+        await api.post('/like',{user_id,comment_id})
+      }
+    }
+    else{
+      setLikeCount(e => e-1);
+    }
+  }
+
   return (
     <div>
       <div className={`group mb-4 relative bg-surface-container-low p-6 border-l ${side === 'for' ? 'border-primary/20 hover:border-primary/60':'border-secondary/20 hover:border-secondary/60'}  transition-all shadow-[inset_0_0_20px_rgba(164,230,255,0.03)]`}>
@@ -34,14 +54,14 @@ const UserArgumentCard = ({side,reputation,username,grade,comment,likes}: UserAr
           "{comment}"
         </p>
         <div className="flex gap-4">
-          <button className={`flex items-center gap-2 font-label text-[10px] uppercase text-outline ${side === 'for' ? 'hover:text-primary' : 'hover:text-secondary'}  transition-colors`}>
+          <button onClick={handleClick} className={`flex items-center gap-2 font-label text-[10px] uppercase text-outline ${(liked && side === 'for') && 'text-primary'} ${(liked && side === 'against') && 'text-secondary'} ${side === 'for' ? 'hover:text-primary' : 'hover:text-secondary'}  transition-colors`}>
             <span
               className="material-symbols-outlined text-sm"
               data-icon="thumb_up"
             >
-              <FiThumbsUp />
+              {!liked ? <FiThumbsUp /> : <VscThumbsupFilled className={`${ side === 'for' ? 'text-primary' : 'text-secondary'}`}/>}
             </span>{" "}
-            {likes}
+            {likeCount}
           </button>
         </div>
       </div>

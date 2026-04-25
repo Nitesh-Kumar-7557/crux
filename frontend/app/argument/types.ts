@@ -6,6 +6,8 @@ export interface UserArgumentCardProps {
     grade: string;
     comment: string;
     likes: number;
+    user_id: number;
+    comment_id: number;
 }
 
 export interface ArgumentHeaderProps {

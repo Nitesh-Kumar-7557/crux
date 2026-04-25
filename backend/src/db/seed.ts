@@ -117,49 +117,41 @@ const seed = async () => {
     // ============================================================
     // COMMENTS
     // ============================================================
-    const forCommentsResult = await client.query(
+    const commentsResult = await client.query(
       `
-      INSERT INTO for_comments (user_id, argument_id, content)
+      INSERT INTO comments (user_id, argument_id, side, content)
       VALUES
-        ($1,  $11, 'AI personhood ensures accountability gaps are closed.'),
-        ($2,  $12, 'Social media connects people and spreads awareness.'),
-        ($3,  $13, 'UBI provides financial stability in an automated future.'),
-        ($4,  $14, 'Space exploration drives innovation and discovery.'),
-        ($5,  $15, 'Crypto enables decentralization and financial freedom.'),
-        ($6,  $16, 'Climate action is critical for long-term survival.'),
-        ($7,  $17, 'AI will also create new industries and opportunities.'),
-        ($8,  $18, 'Platforms must take responsibility for harmful content.'),
-        ($9,  $19, 'Nuclear energy produces minimal carbon emissions.'),
-        ($10, $20, 'Regulation ensures fairness and prevents monopolies.')
+        ($1,  $11, 'for',     'AI personhood ensures accountability gaps are closed.'),
+        ($2,  $12, 'for',     'Social media connects people and spreads awareness.'),
+        ($3,  $13, 'for',     'UBI provides financial stability in an automated future.'),
+        ($4,  $14, 'for',     'Space exploration drives innovation and discovery.'),
+        ($5,  $15, 'for',     'Crypto enables decentralization and financial freedom.'),
+        ($6,  $16, 'for',     'Climate action is critical for long-term survival.'),
+        ($7,  $17, 'for',     'AI will also create new industries and opportunities.'),
+        ($8,  $18, 'for',     'Platforms must take responsibility for harmful content.'),
+        ($9,  $19, 'for',     'Nuclear energy produces minimal carbon emissions.'),
+        ($10, $20, 'for',     'Regulation ensures fairness and prevents monopolies.'),
+        ($1,  $11, 'against', 'AI lacks consciousness and cannot hold legal responsibility.'),
+        ($2,  $12, 'against', 'Social media spreads misinformation and harms mental health.'),
+        ($3,  $13, 'against', 'UBI may discourage work and strain economies.'),
+        ($4,  $14, 'against', 'Resources should be spent solving Earth problems first.'),
+        ($5,  $15, 'against', 'Crypto is volatile and lacks regulation.'),
+        ($6,  $16, 'against', 'Economic growth is necessary to fund climate solutions.'),
+        ($7,  $17, 'against', 'AI will replace many jobs faster than it creates new ones.'),
+        ($8,  $18, 'against', 'Holding platforms liable may limit free speech.'),
+        ($9,  $19, 'against', 'Nuclear waste and risks make it unsafe.'),
+        ($10, $20, 'against', 'Overregulation can stifle innovation in tech.')
       RETURNING id
-    `,
-      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id,
-        args[0].id, args[1].id, args[2].id, args[3].id, args[4].id, args[5].id, args[6].id, args[7].id, args[8].id, args[9].id]
+      `,
+      [
+        users[0].id, users[1].id, users[2].id, users[3].id, users[4].id,
+        users[5].id, users[6].id, users[7].id, users[8].id, users[9].id,
+        args[0].id,  args[1].id,  args[2].id,  args[3].id,  args[4].id,
+        args[5].id,  args[6].id,  args[7].id,  args[8].id,  args[9].id,
+      ]
     );
 
-    console.log(`✅ Seeded ${forCommentsResult.rows.length} for comments`);
-
-    const againstCommentsResult = await client.query(
-      `
-      INSERT INTO against_comments (user_id, argument_id, content)
-      VALUES
-        ($1,  $11, 'AI lacks consciousness and cannot hold legal responsibility.'),
-        ($2,  $12, 'Social media spreads misinformation and harms mental health.'),
-        ($3,  $13, 'UBI may discourage work and strain economies.'),
-        ($4,  $14, 'Resources should be spent solving Earth problems first.'),
-        ($5,  $15, 'Crypto is volatile and lacks regulation.'),
-        ($6,  $16, 'Economic growth is necessary to fund climate solutions.'),
-        ($7,  $17, 'AI will replace many jobs faster than it creates new ones.'),
-        ($8,  $18, 'Holding platforms liable may limit free speech.'),
-        ($9,  $19, 'Nuclear waste and risks make it unsafe.'),
-        ($10, $20, 'Overregulation can stifle innovation in tech.')
-      RETURNING id
-    `,
-      [users[0].id, users[1].id, users[2].id, users[3].id, users[4].id, users[5].id, users[6].id, users[7].id, users[8].id, users[9].id,
-        args[0].id, args[1].id, args[2].id, args[3].id, args[4].id, args[5].id, args[6].id, args[7].id, args[8].id, args[9].id]
-    );
-
-    console.log(`✅ Seeded ${againstCommentsResult.rows.length} against comments`);
+    console.log(`✅ Seeded ${commentsResult.rows.length} comments`);
 
     await client.query("COMMIT");
     console.log("🎉 Seeding complete!");

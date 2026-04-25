@@ -28,7 +28,7 @@ const ActiveArgumentsNavbar = ({
             <button
               key={i}
               onClick={() => changeActive(e)}
-              className={`${e === active ? "text-primary border-b uppercase border-primary pb-1 cursor-pointer" : "text-outline hover:text-on-surface uppercase transition-colors cursor-pointer"}`}
+              className={`${e === active ? "text-primary border-b uppercase border-primary pb-1 cursor-pointer" : "text-outline border-b border-transparent pb-1 hover:text-on-surface uppercase transition-colors cursor-pointer"}`}
             >
               {e}
             </button>

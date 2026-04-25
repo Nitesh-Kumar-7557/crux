@@ -3,6 +3,7 @@ CREATE TABLE users (
     role VARCHAR(20) DEFAULT 'user',
     name VARCHAR(20) NOT NULL,
     username VARCHAR(20) UNIQUE NOT NULL,
+    logic_score INT DEFAULT 0,
     email VARCHAR(50) NOT NULL UNIQUE,
     hashed_password TEXT NOT NULL
 );

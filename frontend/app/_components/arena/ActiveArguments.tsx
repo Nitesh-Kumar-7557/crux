@@ -8,7 +8,7 @@ import HighStakesTab from "./HighStakesTab";
 import { MainTrendingArenaCardData, TrendingArenaCardData } from "@/app/types";
 import TrendingArenaCard from "./TrendingArenaCard";
 
-const tabList = ["trending", "newest", "high stakes"];
+const tabList = ["trending", "newest"];     // for future: "high stakes"
 
 const ActiveArguments = ({
   mainTrendingArenaCardData,

@@ -1,5 +1,5 @@
 import { ArgumentArenaProps } from "@/app/argument/types";
-import UserArgumentCard from "./UserArgumentCard";
+import UserArgumentCard from "./UserCommentCard";
 import { MdMemory } from "react-icons/md";
 
 const TheCaseAgainst = ({
@@ -45,6 +45,8 @@ const TheCaseAgainst = ({
             grade={e.grade}
             comment={e.comment}
             likes={e.likes}
+            user_id={e.user_id}
+            comment_id={e.comment_id}
           />
         ))}
       </div>

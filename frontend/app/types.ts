@@ -48,3 +48,15 @@ export interface SystemHealthData {
     logicStacked: number;
     activeArenas: number;
 }
+
+export interface NewestCardProps {
+    username: string;
+    domain: string;
+    title: string;
+    affirmativescore: number;
+    negativescore: number;
+    argumentid: number;
+    argumentNum: number;
+    time: string;
+}
+export type NewestCardData = NewestCardProps[]

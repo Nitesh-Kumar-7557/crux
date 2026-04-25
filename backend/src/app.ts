@@ -8,6 +8,7 @@ import argumentRoutes from './routes/argument.route.js';
 import commentRoutes from './routes/comment.route.js';
 import arenaRoutes from './routes/arena.route.js';
 import aiRoutes from './routes/ai.route.js';
+import likeRoutes from './routes/like.route.js';
 
 
 
@@ -31,6 +32,7 @@ app.use("/argument",argumentRoutes)
 app.use("/comment",commentRoutes)
 app.use("/arena",arenaRoutes)
 app.use("/ai",aiRoutes)
+app.use("/like",likeRoutes)
 
 
 

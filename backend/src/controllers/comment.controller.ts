@@ -3,19 +3,13 @@ import pool from "../db/index.js";
 
 export async function getComments(req: Request, res: Response){
     const {id} = req.params;
-    const forComments = await pool.query(`
-            SELECT u.username, c.content, c.likes
-            FROM for_comments c
+    const comments = await pool.query(`
+            SELECT c.id AS comment_id, u.username, c.side, u.logic_score, c.content, c.likes
+            FROM comments c
             JOIN users u ON c.user_id = u.id
             WHERE c.argument_id = $1;
         `,[Number(id)])
-    const againstComments = await pool.query(`
-            SELECT u.username, c.content, c.likes
-            FROM against_comments c
-            JOIN users u ON c.user_id = u.id
-            WHERE c.argument_id = $1;
-        `,[Number(id)])
-    res.status(200).json({forComments: forComments.rows, againstComments: againstComments.rows})
+    res.status(200).json({comments: comments.rows})
 }
 
 export async function postAffirmativeComment(req: Request, res: Response){
@@ -23,7 +17,7 @@ export async function postAffirmativeComment(req: Request, res: Response){
     const {userId, input} = req.body;
     try{
         await pool.query(`
-                INSERT INTO for_comments(argument_id, user_id, content) VALUES ($1,$2,$3)
+                INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'for')
             `,[id, userId, input])
         
         res.status(201).json({message: "Successfully comment posted!"})
@@ -33,12 +27,13 @@ export async function postAffirmativeComment(req: Request, res: Response){
     }
 
 }
+
 export async function postNegativeComment(req: Request, res: Response){
     const {id} = req.params;
     const {userId, input} = req.body;
     try{
         await pool.query(`
-                INSERT INTO against_comments(argument_id, user_id, content) VALUES ($1,$2,$3)
+                INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'against')
             `,[id, userId, input])
         
         res.status(201).json({message: "Successfully comment posted!"})
@@ -48,3 +43,7 @@ export async function postNegativeComment(req: Request, res: Response){
     }
 
 }
+
+// export async function name() {
+    
+// }

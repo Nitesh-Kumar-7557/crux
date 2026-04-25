@@ -11,11 +11,6 @@ const newsreader = Newsreader({
 const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: MainTrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low mt-5 p-8 pb-4 border-l-2 border-primary group hover:bg-surface-container transition-colors relative overflow-hidden">
-      <div className="absolute -top-2.5 right-0 p-4">
-        <span className="bg-primary-container/10 text-primary-container px-2 py-1 font-label text-[10px] tracking-widest uppercase">
-          Live Arena
-        </span>
-      </div>
       <div className="flex items-center gap-3 mb-6">
         <img alt="Aurelius_X" className="w-8 h-8 border border-outline-variant/30 grayscale hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY5Anp_D4xW6pJE78a2afpLChi3n-4n80CePZRl9k3_YW9rmmoew2pl6257BuP4_E8hZqh9u13uGYgZXQFhwsbwoQwM0JtnQaaLJBih9wYDfaGqm09iQ_YE538pVkDQcQ5bJaEJzREFPAXwM7dkiihuigd-a6g_2sXBdnGbZgtCFBNZD_NE9zLmWe5uqoqow7VHtx5Yp3eQL-KTBAZ4Pfku3J0sGV0VTFF9GDeJ3NFN_V0u5U6ybXJIEN8rTU4PrUeXh2MfvHK2bL6"/>
         <div className="flex flex-col">
