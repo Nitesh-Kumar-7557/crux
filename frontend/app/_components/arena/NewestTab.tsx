@@ -41,7 +41,7 @@ const NewestTab = () => {
 
   return (
     <div>
-      {cardsData.map((e,i) => (
+      {cardsData.length && cardsData.map((e,i) => (
         <NewestCard key={i} username={e.username} domain={e.domain} title={e.title} affirmativescore={e.affirmativescore} negativescore={e.negativescore} argumentid={e.argumentid} time={timeAgo(e.time)} argumentNum={e.argumentNum} />
       ))}
     </div>

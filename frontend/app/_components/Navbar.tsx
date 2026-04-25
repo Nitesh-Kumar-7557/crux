@@ -3,6 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
 import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
+import { useUser } from "../_hooks/useUser";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   {label: "Arena", href:"/"},
@@ -10,7 +12,15 @@ const navLinks = [
 ]
 
 const Navbar = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const [user,setUser] = useState<any>(null)
+  useEffect(()=>{
+    async function fetchUser(){
+      const userInfo = await useUser();
+      setUser(userInfo)
+    };
+    fetchUser();
+  },[])
   return (
     <div className="bg-neutral-950 py-3 px-6 flex items-start justify-between">
       <div className="flex">
@@ -37,13 +47,13 @@ const Navbar = () => {
             type="text"
           />
         </div>
-        <Link href={'/statement'} className="bg-primary text-on-primary px-4 py-2 font-label uppercase tracking-widest text-xs font-bold hover:bg-primary-container active:scale-95 transition-all duration-100">
+        <Link href={user === null ? '/login' : '/statement'} className="bg-primary text-on-primary px-4 py-2 font-label uppercase tracking-widest text-xs font-bold hover:bg-primary-container active:scale-95 transition-all duration-100">
           NEW STATEMENT
         </Link>
         <span className="cursor-pointer text-gray-500 hover:text-primary-container transition-colors">
           <IoIosNotificationsOutline size={31} />
         </span>
-        <Link href={'/profile'} className={`cursor-pointer ${pathname === '/profile' ? 'border-b-2 border-primary-container pb-1 text-primary-container':''} text-gray-500 hover:text-primary-container transition-colors`}>
+        <Link href={user ? '/profile' : '/login'} className={`cursor-pointer ${pathname === '/profile' ? 'border-b-2 border-primary-container pb-1 text-primary-container':''} text-gray-500 hover:text-primary-container transition-colors`}>
           <CgProfile size={26} />
         </Link>
       </div>

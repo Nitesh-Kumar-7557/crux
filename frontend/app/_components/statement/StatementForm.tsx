@@ -15,13 +15,14 @@ import { useUser } from "@/app/_hooks/useUser";
 import { useRouter } from "next/navigation";
 import api from "@/app/axios";
 import { RiRobot3Line } from "react-icons/ri";
+import { jwtPayload } from "@/app/_types/jwt";
 const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
 const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const router = useRouter();
-  const user = useUser();
+  const userPromise: Promise<jwtPayload | null> = useUser();
 
   const [text, setText] = useState("");
   const [selectedDomain, setSelectedDomain] = useState("AI");
@@ -32,13 +33,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const [feedback, setFeedback] = useState('Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.')
   
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
-
-  // if (!user) return null;
+ 
 
   async function checkEligibility(){
     setLoading(true);
@@ -57,6 +52,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    const user = await userPromise;
     await api.post("/argument", {
       user_id: user?.id,
       content: text,

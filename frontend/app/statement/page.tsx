@@ -1,13 +1,7 @@
-'use client';
 import StatementHeader from "../_components/statement/StatementHeader";
 import CruxAIRoleInfo from "../_components/statement/CruxAIRoleInfo";
 import { DomainClassification } from "./types";
-import dynamic from "next/dynamic";
-
-const StatementForm = dynamic(
-  () => import("@/app/_components/statement/StatementForm"),
-  { ssr: false }
-);
+import StatementForm from "../_components/statement/StatementForm";
 
 // Dummy Data
 const domains: DomainClassification = ['AI','Geopolitics','Technology','Science','Other']

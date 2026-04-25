@@ -130,7 +130,7 @@ export async function generateNewAccess(req: Request, res: Response) {
   const refreshToken = req.cookies.refresh_token;
 
   if (!refreshToken) {
-    return res.status(401).json({ error: "no refresh token" });
+    return res.status(200).json({ error: "no refresh token" });
   }
 
   try {

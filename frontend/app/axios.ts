@@ -35,7 +35,7 @@ api.interceptors.response.use(
 
         original.headers.Authorization = `Bearer ${data.access_token}`;
 
-        return axios(original);
+        return api(original);
       } catch (err) {
         localStorage.removeItem("access_token");
         window.location.href = "/login";

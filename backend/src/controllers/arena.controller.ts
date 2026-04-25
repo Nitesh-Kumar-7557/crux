@@ -73,19 +73,14 @@ export async function getNewestCardData(req: Request, res: Response){
                     a.negative AS negativeScore,
                     a.id AS argumentId,
                     a.created_at AT TIME ZONE 'UTC' AS time,
-                    COALESCE(fc.for_count, 0) + COALESCE(ac.against_count, 0) AS argumentNum
+                    COALESCE(c.count, 0) AS argumentNum
                 FROM arguments a
                 JOIN users u ON a.user_id = u.id
                 LEFT JOIN (
-                    SELECT argument_id, COUNT(*) AS for_count
-                    FROM for_comments
+                    SELECT argument_id, COUNT(*) AS count
+                    FROM comments c
                     GROUP BY argument_id
-                ) fc ON a.id = fc.argument_id
-                LEFT JOIN (
-                    SELECT argument_id, COUNT(*) AS against_count
-                    FROM against_comments
-                    GROUP BY argument_id
-                ) ac ON a.id = ac.argument_id
+                ) c ON a.id = c.argument_id
                 ORDER BY a.id DESC
                 LIMIT 20;
             `)
