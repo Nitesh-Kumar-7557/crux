@@ -138,7 +138,7 @@ export async function generateNewAccess(req: Request, res: Response) {
 
     if (!tokenData) {
       return res
-        .status(401)
+        .status(200)
         .json({ error: "invalid or expired refresh token!" });
     }
 

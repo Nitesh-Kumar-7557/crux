@@ -2,6 +2,7 @@
 import TheCaseFor from "./TheCaseFor";
 import TheCaseAgainst from "./TheCaseAgainst";
 import { useUser } from "@/app/_hooks/useUser";
+import { useEffect, useState } from "react";
 
 function convertLogicScore(score: number){
   // Beginner       -> B   0-50
@@ -39,7 +40,14 @@ function convertLogicScore(score: number){
 const ArgumentArena = ({aiAnalysis, comments}:{aiAnalysis: [string,string], comments: any}) => {
   
 
-  const user = useUser();
+  const [user,setUser] = useState<any>(null)
+  useEffect(()=>{
+    async function fetchUser(){
+      const userInfo = await useUser();
+      setUser(userInfo)
+    };
+    fetchUser();
+  },[])
 
   const forCaseComments: any = []
   const againstCaseComments: any = []

@@ -6,11 +6,19 @@ import api from "@/app/axios";
 import { useEffect, useState } from "react";
 
 const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
-  const user = useUser() as jwtPayload;
+
+  const [user,setUser] = useState<any>(null)
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(()=>{
+    async function fetchUser(){
+      const userInfo = await useUser();
+      setUser(userInfo)
+    };
+    fetchUser();
+    setMounted(true);
+  },[])
   
   if (!mounted || !user) return null;
 
