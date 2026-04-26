@@ -56,53 +56,53 @@ const seed = async () => {
       VALUES
         ($1,  'AI should be granted legal personhood.',
               'legal personhood', 'technology',
-              'Granting AI legal personhood would enable autonomous systems to enter contracts, own intellectual property, and be held liable for their actions — creating clear accountability frameworks as AI grows more capable and independent.',
-              'AI lacks consciousness, emotions, and moral agency. Legal personhood for AI risks diluting rights meant for humans and living beings, and could be exploited by corporations to shield themselves from liability behind an AI entity.'),
+              'Autonomous systems need legal standing to function as independent agents in society.\n\n### Key Points\n- Enables AI to enter contracts and own intellectual property\n- Creates clear accountability as AI grows more capable and independent\n- Establishes liability frameworks before systems become uncontrollable',
+              'AI lacks the consciousness and moral agency that legal personhood was designed to protect.\n\n### Key Points\n- Dilutes rights meant exclusively for humans and living beings\n- Corporations could exploit AI personhood to evade liability\n- No ethical basis for rights without genuine autonomy or suffering'),
 
         ($2,  'Social media does more harm than good to society.',
               'more harm', 'society',
-              'Extensive research links social media to rising anxiety, depression, and loneliness — especially among teens. It amplifies misinformation, breeds addiction through algorithmic design, and has eroded shared civic discourse.',
-              'Social media has democratized information, connected marginalized communities, enabled grassroots activism, and given billions access to global knowledge and economic opportunities that did not exist before.'),
+              'Decades of research consistently link social media to measurable psychological and civic damage.\n\n### Key Points\n- Drives rising anxiety and depression, especially among teenagers\n- Algorithmic design engineers addiction at the cost of mental health\n- Erodes shared civic discourse by amplifying outrage over truth',
+              'Social media has fundamentally expanded human connection and access to information at scale.\n\n### Key Points\n- Democratized information for billions who lacked mainstream media access\n- Enabled grassroots activism and gave voice to marginalized communities\n- Created entirely new economic opportunities and global markets'),
 
         ($3,  'Universal basic income is necessary for the future of work.',
               'basic income', 'economics',
-              'As automation displaces jobs at an accelerating pace, UBI provides a safety net that ensures no one is left behind. It empowers workers to retrain, pursue entrepreneurship, and engage in caregiving or creative work without financial ruin.',
-              'UBI is fiscally unsustainable at scale and could fuel inflation. Critics argue it disincentivizes work, crowds out targeted welfare programs, and ignores that automation historically creates more jobs than it destroys.'),
+              'Accelerating automation demands a systemic safety net that no targeted program can provide.\n\n### Key Points\n- Ensures no worker is left behind as jobs are structurally displaced\n- Empowers retraining, entrepreneurship, and caregiving without financial ruin\n- Decouples survival from employment in an era of machine labor',
+              'UBI is fiscally unsustainable and misdiagnoses the actual threat automation poses.\n\n### Key Points\n- At scale, costs would be inflationary and crowd out targeted welfare\n- Disincentivizes work and productive contribution to society\n- Automation historically creates more jobs than it destroys — UBI assumes the worst'),
 
         ($4,  'Space exploration is a waste of resources.',
               'Space exploration', 'science',
-              'With billions living in poverty, facing climate disasters, or lacking healthcare, diverting trillions toward space exploration reflects skewed priorities. Those funds could directly alleviate suffering on Earth right now.',
-              'Space exploration drives technological innovation — from GPS to medical imaging — while securing humanity''s long-term survival. It also inspires scientific literacy and yields massive returns through spinoff technologies and resource discovery.'),
+              'Trillions spent on space while billions lack basic needs reflects a profound failure of priorities.\n\n### Key Points\n- Funds could directly address poverty, disease, and climate disasters on Earth\n- Benefits of space investment are abstract and long-term; suffering is immediate\n- Private space ventures primarily serve billionaire vanity, not humanity',
+              'Space exploration is humanity''s highest-return long-term investment, not a luxury.\n\n### Key Points\n- Has produced GPS, medical imaging, water filtration, and countless spinoff technologies\n- Secures humanity''s survival by developing off-world contingency options\n- Inspires scientific literacy and yields compounding returns across generations'),
 
         ($5,  'Cryptocurrency will replace traditional banking systems.',
               'Cryptocurrency', 'finance',
-              'Cryptocurrency offers decentralized, borderless, and permissionless financial infrastructure. It can bank the unbanked, reduce remittance costs, and eliminate rent-seeking middlemen — pointing toward a more equitable financial future.',
-              'Crypto remains volatile, energy-intensive, and largely unregulated. Traditional banking offers consumer protections, stability, and trust that crypto has yet to replicate at scale. Most institutional adoption still relies on fiat on-ramps.'),
+              'Crypto offers the first genuinely decentralized alternative to rent-seeking financial infrastructure.\n\n### Key Points\n- Banks the unbanked — 1.4 billion adults globally without financial access\n- Eliminates middlemen and slashes remittance costs for migrant workers\n- Permissionless and borderless by design — no institution can revoke access',
+              'Crypto remains too volatile, energy-intensive, and unregulated to displace mature banking systems.\n\n### Key Points\n- Lacks consumer protections that traditional banking guarantees by law\n- Price volatility makes it structurally unsuitable as a medium of exchange\n- Most institutional crypto adoption still depends entirely on fiat on-ramps'),
 
         ($6,  'Climate change action should be prioritized over economic growth.',
               'prioritized', 'environment',
-              'The economic cost of inaction on climate change — through floods, droughts, crop failures, and displacement — far exceeds the cost of transitioning to clean energy now. Sustainable growth is only possible on a stable planet.',
-              'Aggressive climate policy without economic safeguards can devastate developing nations still industrializing. Growth funds innovation, and many argue that technological progress — not austerity — is the most effective path to decarbonization.'),
+              'The cost of climate inaction already exceeds the cost of transition — the math is settled.\n\n### Key Points\n- Floods, droughts, and crop failures impose economic costs dwarfing clean energy investment\n- Sustainable growth is only possible on a climatically stable planet\n- Delaying action compounds costs exponentially — early investment is rational',
+              'Aggressive climate policy without economic safeguards punishes the world''s poorest nations most.\n\n### Key Points\n- Developing nations still industrializing cannot afford a forced energy transition\n- Economic growth funds the very innovation needed to solve climate change\n- Technological progress — not austerity — is the most viable decarbonization path'),
 
         ($7,  'Artificial intelligence will cause more unemployment than it creates.',
               'unemployment', 'technology',
-              'Unlike previous automation waves, AI threatens white-collar, creative, and cognitive jobs simultaneously. The speed of displacement will outpace retraining capacity, leaving large portions of the workforce structurally unemployed.',
-              'Every major technological revolution has ultimately created more jobs than it displaced. AI will eliminate repetitive tasks while creating demand for new roles in AI oversight, ethics, maintenance, and adjacent industries we can''t yet predict.'),
+              'AI threatens cognitive and creative jobs simultaneously — unlike any automation wave before it.\n\n### Key Points\n- White-collar, legal, medical, and creative roles are all vulnerable at once\n- Speed of displacement will outpace any realistic retraining infrastructure\n- Structural unemployment will concentrate in communities with no alternative industries',
+              'Every technological revolution has ultimately created more jobs than it eliminated.\n\n### Key Points\n- AI eliminates repetitive tasks while generating demand for oversight, ethics, and new roles\n- Adjacent industries we cannot yet predict will absorb displaced workers\n- Historical pattern: automation raises productivity, which expands the overall job market'),
 
         ($8,  'Social media platforms should be held liable for misinformation.',
               'misinformation', 'law',
-              'Platforms profit from engagement driven by outrage and falsehoods while facing no consequences for the harm caused. Legal liability would create strong incentives to invest seriously in content moderation and algorithmic accountability.',
-              'Holding platforms liable for user-generated content would trigger over-censorship, chilling free speech. It conflates platforms with publishers and could hand governments tools to suppress dissent under the guise of fighting misinformation.'),
+              'Platforms profit from misinformation-driven engagement while bearing zero consequence for the harm.\n\n### Key Points\n- Legal liability creates direct financial incentive for serious content moderation\n- Platforms already curate content algorithmically — liability should follow editorial control\n- Victims of misinformation currently have no legal recourse against the amplifier',
+              'Platform liability for user content would trigger mass censorship and destroy open discourse.\n\n### Key Points\n- Conflates platforms with publishers — a legally and functionally false equivalence\n- Governments could weaponize liability laws to suppress legitimate dissent\n- Moderation at scale is technically impossible without catastrophic collateral censorship'),
 
         ($9,  'Nuclear energy is the cleanest solution to the global energy crisis.',
               'cleanest solution', 'energy',
-              'Nuclear power produces near-zero carbon emissions per kilowatt-hour, operates regardless of weather, and has the smallest land footprint of any energy source. Modern reactor designs have dramatically reduced safety and waste risks.',
-              'Nuclear plants are enormously expensive and slow to build, making them a poor fit for the urgency of the climate crisis. Waste storage remains unsolved, and accidents like Fukushima demonstrate that even rare failures carry catastrophic consequences.'),
+              'Nuclear produces near-zero carbon emissions and operates independently of weather or daylight.\n\n### Key Points\n- Smallest land footprint of any major energy source at equivalent output\n- Modern reactor designs have dramatically reduced safety and waste risks\n- Only proven baseload power source fully compatible with complete decarbonization',
+              'Nuclear is too expensive and too slow to build to meet the urgency of the climate crisis.\n\n### Key Points\n- Average construction time exceeds 10 years — utility-scale renewables deploy in months\n- Waste storage remains an unsolved problem spanning geological timescales\n- Rare failures like Fukushima carry consequences no other energy source can match'),
 
         ($10, 'Governments should regulate big tech companies like public utilities.',
               'big tech companies', 'policy',
-              'A handful of tech giants control the digital infrastructure billions depend on daily. Treating them as utilities would ensure fair access, prevent anti-competitive behavior, and protect users from exploitation of their data and attention.',
-              'Public utility regulation stifles innovation by reducing the competitive incentives that drove tech''s growth. Heavy-handed regulation risks entrenching incumbents, slowing product development, and shifting power to politically motivated regulators.')
+              'A handful of corporations control digital infrastructure billions depend on — that is a utility.\n\n### Key Points\n- Utility status ensures fair access and prevents anti-competitive gatekeeping\n- Protects users from algorithmic exploitation of attention and personal data\n- Accountability frameworks would force transparency currently absent from platform governance',
+              'Utility regulation would strangle the innovation engine that made big tech valuable in the first place.\n\n### Key Points\n- Competitive incentives drove every major platform breakthrough — regulation kills that pressure\n- Heavy-handed rules risk entrenching incumbents and blocking new challengers\n- Shifts power to politically motivated regulators with no technical expertise')
       RETURNING id
       `,
       [
