@@ -44,9 +44,12 @@ export async function getTrendingCardData(req: Request, res: Response){
                     a.content AS title,
                     a.affirmative AS affirmativeScore,
                     a.negative AS negativeScore,
-                    a.id AS argumentId
+                    a.id AS argumentId,
+                    COUNT(DISTINCT c.user_id)::int AS active_minds
                 FROM arguments a
                 JOIN users u ON a.user_id = u.id
+                LEFT JOIN comments c ON c.argument_id = a.id
+                GROUP BY a.id, u.username, a.domain, a.content, a.affirmative, a.negative
                 ORDER BY a.id DESC
                 LIMIT 7;
             `)
@@ -73,7 +76,7 @@ export async function getNewestCardData(req: Request, res: Response){
                     a.negative AS negativeScore,
                     a.id AS argumentId,
                     a.created_at AT TIME ZONE 'UTC' AS time,
-                    COALESCE(c.count, 0) AS argumentNum
+                    COALESCE(c.count, 0)::int AS "argumentNum"
                 FROM arguments a
                 JOIN users u ON a.user_id = u.id
                 LEFT JOIN (
@@ -93,5 +96,45 @@ export async function getNewestCardData(req: Request, res: Response){
     catch(err){
         console.error(err)
         res.status(200).json({})
+    }
+}
+
+export async function getSidebarData(req: Request, res: Response){
+    try {
+        const data1 = await pool.query(`
+            SELECT
+                a.domain AS topic,
+                ROUND(AVG(a.affirmative - a.negative))::numeric AS "changePercentage",
+                COUNT(DISTINCT c.id)::int AS arguments,
+                COUNT(DISTINCT a.id)::int AS "liveBattles"
+            FROM arguments a
+            LEFT JOIN comments c ON c.argument_id = a.id
+            GROUP BY a.domain
+            ORDER BY arguments DESC
+            LIMIT 3;
+        `)
+
+        const data2 = await pool.query(`
+                SELECT name, ROUND(logic_score::int) AS "logicScore"
+                FROM users
+                ORDER BY logic_score DESC
+                LIMIT 3;
+            `)
+        
+        const data3 = await pool.query(`
+                SELECT
+                    (SELECT ROUND(SUM(logic_score)::int) FROM users) AS "logicStacked",
+                    (SELECT COUNT(*)::int FROM arguments) AS "activeArenas"
+            `)
+
+        if(data1.rows.length === 0 || data2.rows.length === 0 || data3.rows.length === 0){
+            return res.status(200).json([])
+        }
+
+        res.status(200).json({data1: data1.rows, data2: data2.rows, data3: data3.rows})
+    }
+    catch(err){
+        console.error(err)
+        res.status(200).json([])
     }
 }

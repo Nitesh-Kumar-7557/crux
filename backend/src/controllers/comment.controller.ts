@@ -3,6 +3,56 @@ import pool from "../db/index.js";
 import { groqGPT } from "../ai/groq.js";
 import { jsonrepair } from "jsonrepair";
 
+async function updateProbability(argumentId: number){
+    const {rows} = await pool.query(`
+            SELECT content, for_analysis, against_analysis
+            FROM arguments
+            WHERE id = $1;
+        `,[argumentId])
+    
+    const systemPrompt = `You are a debate probability engine.
+
+        You will be given a debate statement and two analyses — one FOR and one AGAINST.
+        Your job: assign a probability split representing which side currently holds the stronger position relative to the statement.
+
+        RULES:
+        - Output two integers: "affirmative" and "negative"
+        - They MUST sum to exactly 100. No exceptions.
+        - Evaluate each analysis against the statement — how well does it defend its position?
+        - Base the split purely on: evidence quality, logical soundness, specificity, and persuasiveness
+        - Do NOT factor in personal opinion or which side you agree with
+        - A perfectly balanced debate = 50/50. A clearly dominant side = 65/35 or higher.
+        - Never go below 20 or above 80 — no debate is ever completely one-sided.
+
+        RETURN ONLY raw JSON. No markdown. No explanation.
+
+        Output format:
+        {"affirmative": number, "negative": number}`;
+
+    const userPrompt = `STATEMENT: ${rows[0].content}
+
+        FOR analysis: ${rows[0].for_analysis}
+        AGAINST analysis: ${rows[0].against_analysis}
+
+        Assign the probability split. Return raw JSON only.`;
+
+    const raw = await groqGPT(systemPrompt, userPrompt);
+
+    const repaired = jsonrepair(raw);
+    const parsed = JSON.parse(repaired);
+
+    const affirmative = Math.round(parsed.affirmative);
+    const negative = 100 - affirmative;
+
+    await pool.query(`
+            UPDATE arguments
+            SET affirmative = $1,
+                negative = $2
+            WHERE id = $3
+        `,[affirmative, negative, argumentId])
+
+}
+
 async function updateAnalysis(argumentId: number, side: string, userId: string, input: string){
 
     const data1 = await pool.query(`
@@ -123,6 +173,8 @@ async function updateAnalysis(argumentId: number, side: string, userId: string, 
             SET ${side}_analysis = $1
             WHERE id = $2;
         `,[parsed.newAnalysis, argumentId])
+    
+    await updateProbability(argumentId)
 }
 
 export async function getComments(req: Request, res: Response){

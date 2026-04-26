@@ -4,7 +4,7 @@ export interface MainTrendingArenaCardProps {
     domain: string;
     title: string;
     argumentNum: number;
-    aiMatchQuality: 'low' | 'medium' | 'high';
+    argumentQuality: 'low' | 'medium' | 'high';
     affermativeScore: number;
     negativeScore: number;
     numOfUsers: number;
@@ -20,6 +20,7 @@ export interface TrendingArenaCardProps {
     affirmativescore: number;
     negativescore: number;
     argumentid: number;
+    active_minds: number;
 }
 export type TrendingArenaCardData = TrendingArenaCardProps[]
 
@@ -27,24 +28,20 @@ export type TrendingArenaCardData = TrendingArenaCardProps[]
 export interface TrendingTopicsCardProps {
     topic: string;
     changePercentage: number;
-    argumnets: number;
+    arguments: number;
     liveBattles: number;
 }
 export type TrendingTopicsCardData = TrendingTopicsCardProps[]
 
 
 export interface TopDebatersCardProps {
-    rank: number;
-    avatar_url: string;
     name: string;
     logicScore: number;
-    titles: number;
 }
 export type TopDebatersCardData = TopDebatersCardProps[]
 
 
 export interface SystemHealthData {
-    status: 'nominal' | 'bad';
     logicStacked: number;
     activeArenas: number;
 }

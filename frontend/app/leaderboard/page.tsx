@@ -2,7 +2,7 @@
 
 const Leaderboard = () => {
   return (
-    <div>Leaderboard</div>
+    <div className="text-center text-2xl py-10">Leaderboard Page Coming Soon!</div>
   )
 }
 

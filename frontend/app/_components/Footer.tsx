@@ -1,4 +1,5 @@
 
+import Link from 'next/link'
 import { CiShare2 } from 'react-icons/ci'
 import { MdOutlineTerminal } from 'react-icons/md'
 
@@ -11,10 +12,9 @@ const Footer = () => {
           <span className="font-label uppercase tracking-widest text-xs text-neutral-500">© 2026 Crux Digital Arena. All Rights Reserved.</span>
         </div>
         <div className="flex gap-8">
-          <a className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href="#">Leaderboard</a>
-          <a className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href="#">Rules of Engagement</a>
-          <a className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href="#">About</a>
-          <a className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+          <Link className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href={'/leaderboard'}>Leaderboard</Link>
+          <Link className="font-label uppercase tracking-tight text-xs text-neutral-500 hover:text-primary transition-colors" href={'/rules'}>Rules of Engagement</Link>
+          <Link className="font-label uppercase tracking-widest text-xs text-neutral-500 hover:text-primary transition-colors" href={'/about'}>About</Link>
         </div>
         <div className="flex gap-4">
           <div className="w-8 h-8 flex items-center justify-center bg-surface-container-high border border-outline-variant/30 text-outline hover:text-primary transition-colors cursor-pointer">

@@ -41,7 +41,7 @@ const ActiveArguments = ({
                 username={e.username}
                 title={e.title}
                 argumentNum={e.argumentNum}
-                aiMatchQuality={e.aiMatchQuality}
+                argumentQuality={e.argumentQuality}
                 affermativeScore={e.affermativeScore}
                 negativeScore={e.negativeScore}
                 numOfUsers={e.numOfUsers}
@@ -60,6 +60,7 @@ const ActiveArguments = ({
                       affirmativescore={e.affirmativescore}
                       negativescore={e.negativescore}
                       argumentid={e.argumentid}
+                      active_minds={e.active_minds}
                     />
                   ),
               )}

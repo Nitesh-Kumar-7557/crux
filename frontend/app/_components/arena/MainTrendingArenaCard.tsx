@@ -8,7 +8,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: MainTrendingArenaCardProps) => {
+const MainTrendingArenaCard = ({username,domain,title,argumentNum,argumentQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: MainTrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low mt-5 p-8 pb-4 border-l-2 border-primary group hover:bg-surface-container transition-colors relative overflow-hidden">
       <div className="flex items-center gap-3 mb-6">
@@ -26,10 +26,10 @@ const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality
       </h2>
       <div className="flex gap-5 border-b border-gray-800 pb-5">
         <span className="font-label [word-spacing:-4px] text-xs text-outline uppercase tracking-widest">
-          <LuMessageSquare className="inline text-primary" /> {argumentNum} Arguments
+          <LuMessageSquare className="inline text-primary" /> {argumentNum} {argumentNum === 1 ? 'Argument' : 'Arguments'}
         </span>
         <span className="font-label [word-spacing:-4px] text-xs text-outline uppercase tracking-widest">
-          <GoVerified className="inline text-tertiary" /> AI Match Quality: {aiMatchQuality}
+          <GoVerified className="inline text-tertiary" /> Argument Quality: {argumentQuality}
         </span>
       </div>
       <div className="py-5">
@@ -42,7 +42,8 @@ const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality
           <span className={`bg-secondary-container`} style={{width:`${negativeScore}%`}}></span>
         </div>
         <div className="mt-7 flex justify-between items-center">
-          <div className="flex -space-x-2">
+          <div></div>
+          {/* <div className="flex -space-x-2">
             <img
               className="w-8 h-8 border-2 border-surface bg-surface"
               data-alt="portrait of a focused intellectual man with glasses and serious expression"
@@ -61,7 +62,7 @@ const MainTrendingArenaCard = ({username,domain,title,argumentNum,aiMatchQuality
             <div className="w-8 h-8 border-2 border-surface bg-surface-container-highest flex items-center justify-center font-label text-[10px]">
               +{numOfUsers}
             </div>
-          </div>
+          </div> */}
           <Link href={`/argument/${argumentId}`} className="border border-primary/30 text-primary px-6 py-2 font-label uppercase tracking-widest text-[10px] hover:bg-primary/10 transition-colors">
             Enter Argument
           </Link>

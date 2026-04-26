@@ -13,6 +13,7 @@ const TrendingArenaCard = ({
   affirmativescore,
   negativescore,
   argumentid,
+  active_minds,
 }: TrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low cursor-pointer md:w-[49%] mt-5 p-6 border-l-2 border-outline-variant/30 hover:border-primary transition-all">
@@ -46,7 +47,7 @@ const TrendingArenaCard = ({
             ></div>
           </div>
           <div className="flex justify-between items-center font-label text-[10px] text-outline uppercase tracking-widest">
-            <span>{10} Active Minds</span>
+            <span>{active_minds} Active {active_minds === 1 ? 'Mind':'Minds'}</span>
             {affirmativescore > negativescore ? (
               <span className="text-primary-container">
                 {affirmativescore}% Favor
