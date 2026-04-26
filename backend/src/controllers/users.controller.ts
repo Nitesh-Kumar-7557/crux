@@ -143,7 +143,7 @@ export async function generateNewAccess(req: Request, res: Response) {
     }
 
     const newAccessToken = createAccessToken({
-      id: tokenData.user_id,
+      id: tokenData.id,
       role: tokenData.role,
       username: tokenData.username,
       email: tokenData.email,

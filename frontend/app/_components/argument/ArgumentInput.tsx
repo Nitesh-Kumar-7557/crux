@@ -3,6 +3,7 @@
 import { useUser } from "@/app/_hooks/useUser";
 import { jwtPayload } from "@/app/_types/jwt";
 import api from "@/app/axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
@@ -10,6 +11,8 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
   const [user,setUser] = useState<any>(null)
   const [input, setInput] = useState("");
   const [mounted, setMounted] = useState(false);
+
+  const router = useRouter();
 
   useEffect(()=>{
     async function fetchUser(){
@@ -28,6 +31,7 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
       input,
     });
     setInput("");
+    router.refresh();
   }
   async function handleNegativeBtn() {
     await api.post(`/comment/negative/${argumentId}`, {
@@ -35,6 +39,7 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
       input,
     });
     setInput("");
+    router.refresh();
   }
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-neutral-950/80 backdrop-blur-xl border-t border-outline-variant/20 py-6 px-6 z-40">
@@ -47,11 +52,6 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
             value={input}
             onChange={(e) => setInput(e.currentTarget.value)}
           />
-          <div className="hidden absolute right-4 top-1/2 -translate-y-1/2 md:flex items-center gap-3">
-            <span className="font-label text-[10px] uppercase text-outline bg-surface-container-high px-2 py-1">
-              Shift + Enter to Submit
-            </span>
-          </div>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <button

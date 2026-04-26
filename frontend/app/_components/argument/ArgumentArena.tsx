@@ -51,7 +51,7 @@ const ArgumentArena = ({aiAnalysis, comments}:{aiAnalysis: [string,string], comm
 
   const forCaseComments: any = []
   const againstCaseComments: any = []
-  comments.comments.forEach((e: {comment_id: number; username: string; side: "for" | "against"; logic_score: number; content: string; likes: number;}) =>{
+  comments.comments.forEach((e: {comment_id: number; username: string; side: "for" | "against"; logic_score: number; content: string; likes: number; post_user_id: number;}) =>{
     if(e.side === "for"){
       forCaseComments.push({
         side: "for",
@@ -62,6 +62,7 @@ const ArgumentArena = ({aiAnalysis, comments}:{aiAnalysis: [string,string], comm
         likes: e.likes,
         user_id: user?.id,
         comment_id: e.comment_id,
+        post_user_id: e.post_user_id,
       })
     }
     else{
@@ -74,6 +75,7 @@ const ArgumentArena = ({aiAnalysis, comments}:{aiAnalysis: [string,string], comm
         likes: e.likes,
         user_id: user?.id,
         comment_id: e.comment_id,
+        post_user_id: e.post_user_id,
       })
     }
   })

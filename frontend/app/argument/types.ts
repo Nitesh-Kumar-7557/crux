@@ -8,6 +8,7 @@ export interface UserArgumentCardProps {
     likes: number;
     user_id: number;
     comment_id: number;
+    post_user_id: number;
 }
 
 export interface ArgumentHeaderProps {

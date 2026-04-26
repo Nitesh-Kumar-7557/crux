@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FiThumbsUp } from "react-icons/fi";
 import { VscThumbsupFilled } from "react-icons/vsc";
 
-const UserArgumentCard = ({side,reputation,username,grade,comment,likes,user_id,comment_id}: UserArgumentCardProps) => {
+const UserArgumentCard = ({side,reputation,username,grade,comment,likes,user_id,comment_id,post_user_id}: UserArgumentCardProps) => {
   const [likeCount,setLikeCount] = useState(likes)
   const [liked,setLiked] = useState(false)
 
@@ -14,7 +14,7 @@ const UserArgumentCard = ({side,reputation,username,grade,comment,likes,user_id,
     if(!liked){
       setLikeCount(e => e+1);
       if(user_id){
-        await api.post('/like',{user_id,comment_id})
+        await api.post('/like',{user_id,comment_id,post_user_id})
       }
     }
     else{
@@ -24,7 +24,7 @@ const UserArgumentCard = ({side,reputation,username,grade,comment,likes,user_id,
 
   return (
     <div>
-      <div className={`group mb-4 relative bg-surface-container-low p-6 border-l ${side === 'for' ? 'border-primary/20 hover:border-primary/60':'border-secondary/20 hover:border-secondary/60'}  transition-all shadow-[inset_0_0_20px_rgba(164,230,255,0.03)]`}>
+      <div className={`group mb-2 relative bg-surface-container-low p-6 border-l ${side === 'for' ? 'border-primary/20 hover:border-primary/60':'border-secondary/20 hover:border-secondary/60'}  transition-all shadow-[inset_0_0_20px_rgba(164,230,255,0.03)]`}>
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-surface-container-high border border-outline-variant/40 flex items-center justify-center">
