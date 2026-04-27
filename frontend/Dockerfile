@@ -15,6 +15,9 @@ RUN npm install
 COPY app/ app/
 COPY public/ public/
 
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 RUN npm run build
 
 

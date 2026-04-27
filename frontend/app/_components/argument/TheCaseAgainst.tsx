@@ -54,6 +54,7 @@ const TheCaseAgainst = ({
             likes={e.likes}
             user_id={e.user_id}
             comment_id={e.comment_id}
+            post_user_id={e.post_user_id}
           />
         ))}
       </div>
