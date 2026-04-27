@@ -10,9 +10,7 @@ const CruxAIRoleInfo = () => {
           Autonomous Adjudication
         </h4>
         <p className="font-body text-xs text-on-surface-variant leading-relaxed">
-          The Crux Engine analyzes the semantic integrity of your statement. It
-          filters for logical fallacies and assigns a "Clarity Score" before
-          broadcasting to the arena.
+          The Crux Engine dissects your statement for argumentative integrity — flagging logical fallacies, measuring controversy potential, and issuing a verdict before anything reaches the arena. Weak claims don't survive.
         </p>
       </div>
       <div className="bg-surface-container p-6 border-l border-primary/30">
@@ -21,9 +19,7 @@ const CruxAIRoleInfo = () => {
           Matchmaking Logic
         </h4>
         <p className="font-body text-xs text-on-surface-variant leading-relaxed">
-          Once live, the system identifies verified debaters with opposing
-          historical data and high Elo ratings in your selected category to
-          ensure a high-stakes clash.
+          Once live, Crux scans its debater pool for opponents with contradicting historical positions and high Logic Scores in your domain. The arena doesn't do friendly debates.
         </p>
       </div>
     </div>

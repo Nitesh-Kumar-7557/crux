@@ -19,7 +19,7 @@ const TopDebatersCard = ({
         {rank < 10 ? `0${rank}` : rank}
       </span>
       <img
-        className="w-10 h-10 border border-outline-variant/30"
+        className="w-10 grayscale-80 h-10 border border-outline-variant/30 hover:grayscale-0 transition-all"
         data-alt="minimalist avatar of a scholarly man with a grey beard and sharp intelligent eyes"
         src={avatar_url}
       />

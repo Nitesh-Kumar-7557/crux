@@ -37,7 +37,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <div className="hidden lg:flex items-center bg-surface-container-low border border-outline-variant/30 px-3 py-1.5 gap-2">
+        {/* <div className="hidden lg:flex items-center bg-surface-container-low border border-outline-variant/30 px-3 py-1.5 gap-2">
           <span className="material-symbols-outlined text-outline text-sm">
             <IoMdSearch />
           </span>
@@ -46,13 +46,13 @@ const Navbar = () => {
             placeholder="Search statements..."
             type="text"
           />
-        </div>
-        <Link href={user === null ? '/login' : '/statement'} className="bg-primary text-on-primary px-4 py-2 font-label uppercase tracking-widest text-xs font-bold hover:bg-primary-container active:scale-95 transition-all duration-100">
+        </div> */}
+        <Link href={user === null ? '/login' : '/statement'} className="bg-primary text-on-primary mx-2 px-4 py-2 font-label uppercase tracking-widest text-xs font-bold hover:bg-primary-container active:scale-95 transition-all duration-100">
           NEW STATEMENT
         </Link>
-        <span className="cursor-pointer text-gray-500 hover:text-primary-container transition-colors">
+        {/* <span className="cursor-pointer text-gray-500 hover:text-primary-container transition-colors">
           <IoIosNotificationsOutline size={31} />
-        </span>
+        </span> */}
         <Link href={user ? '/profile' : '/login'} className={`cursor-pointer ${pathname === '/profile' ? 'border-b-2 border-primary-container pb-1 text-primary-container':''} text-gray-500 hover:text-primary-container transition-colors`}>
           <CgProfile size={26} />
         </Link>

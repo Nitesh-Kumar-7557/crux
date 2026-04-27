@@ -3,7 +3,7 @@ import CruxAIRoleInfo from "../_components/statement/CruxAIRoleInfo";
 import { DomainClassification } from "./types";
 import StatementForm from "../_components/statement/StatementForm";
 
-// Dummy Data
+
 const domains: DomainClassification = ['AI','Geopolitics','Technology','Science','Other']
 
 const page = () => {

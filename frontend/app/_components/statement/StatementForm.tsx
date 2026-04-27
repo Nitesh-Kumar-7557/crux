@@ -25,6 +25,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const userPromise: Promise<jwtPayload | null> = useUser();
 
   const [text, setText] = useState("");
+  const [allowInput, setAllowInput] = useState(true)
   const [selectedDomain, setSelectedDomain] = useState("AI");
   const [keyword, setKeyword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -46,6 +47,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
     setKeyword(data.keyword)
     setFeedback(data.feedback)
     setText(data.improved)
+    setAllowInput(false)
     setDomain(data.domain)
     setLoading(false);
   }
@@ -71,7 +73,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             <span className="material-symbols-outlined text-sm">
               <MdFilterList />
             </span>
-            Domain Classification
+            SELECT YOUR BATTLEGROUND
           </label>
           <div className=" flex flex-wrap gap-2">
             {domains.map((e, i) => (
@@ -92,23 +94,23 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             <span className="material-symbols-outlined text-sm">
               <MdEditNote />
             </span>
-            The Statement
+            YOUR CLAIM
           </label>
           <textarea
-            className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-700 text-on-surface resize-none`}
-            placeholder="State your thesis clearly and without ambiguity..."
+            className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-600 text-on-surface resize-none`}
+            placeholder="Make a claim worth fighting over..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {allowInput && setText(e.target.value)}}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
-            <span>Minimum 50 characters for AI validation</span>
-            <span>{text.length} / 1200</span>
+            <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM 35 CHARACTERS</span>
+            <span>{text.length} / 120</span>
           </div>
         </div>
         {/* <!-- Action Bar --> */}
         <div className="pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row gap-6 items-center justify-between">
           <div className="flex items-center gap-4 text-on-surface-variant">
-            <div className="flex -space-x-1">
+            <div className="flex">
               <div className="w-8 h-8 bg-surface-container-high border border-outline-variant flex items-center justify-center">
                 <span className="material-symbols-outlined text-xs">
                   <TbGavel />
@@ -121,22 +123,22 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
               </div>
             </div>
             <span className="font-label text-[10px] uppercase tracking-widest">
-              System Ready for Processing
+              ARBITER STANDING BY
             </span>
           </div>
           {eligibility === 'pass' && <button
-            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+            className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
             type="submit"
           >
             Broadcast Statement
           <span className="material-symbols-outlined text-lg"><MdSensors /></span>
           </button>}
           {eligibility !== 'pass' && <button
-            onClick={checkEligibility}
-            className={`${text.length > 50 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+            onClick={()=> {if(text.length > 35) checkEligibility()}}
+            className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
             type="button"
           >
-            Check Eligibility
+            SUBMIT TO THE ARBITER
             {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><RiRobot3Line /></span>}
           </button>}
         </div>
