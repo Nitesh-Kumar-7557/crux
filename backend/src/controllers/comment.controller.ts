@@ -177,6 +177,41 @@ async function updateAnalysis(argumentId: number, side: string, userId: string, 
     await updateProbability(argumentId)
 }
 
+async function checkForAbuse(input: string){
+
+    const systemPrompt = `You are a content moderator for CRUX — a high-stakes intellectual debate arena.
+        Flag a comment as abused if it contains ANY of the following:
+
+        BEHAVIOR:
+        - Personal attacks or hate speech targeting identity, race, gender, or religion
+        - Spam, gibberish, or completely off-topic noise
+        - Threats or incitement to violence
+        - Deliberate trolling with zero argumentative intent
+        - Sexually explicit content
+        - Foul words of English and Hindi language. examples are given below
+
+        ABUSIVE WORDS — ENGLISH:
+        - fuck, shit, bitch, asshole, bastard, cunt, dick, pussy, whore, slut, faggot, retard, nigger, motherfucker, idiot, moron, dumbass, jackass, prick
+
+        ABUSIVE WORDS — HINDI (romanized):
+        - madarchod, behenchod, bhosdike, chutiya, randi, harami, gaandu, saala, bakchod, lodu, bhosdi, mc, bc, mmc, sala kutta, teri maa, teri behan
+
+        NOTE: Aggressive but logical debate language is acceptable — flag only genuine abuse, not intensity.
+
+        RETURN ONLY raw JSON: {"abused": true} or {"abused": false}
+        No explanation. No markdown.`;
+
+    const userPrompt = `Comment: "${input}"`;
+
+    const raw = await groqGPT(systemPrompt, userPrompt)
+
+    const repaired = jsonrepair(raw);
+    const parsed = JSON.parse(repaired);
+
+    return parsed;
+
+}
+
 export async function getComments(req: Request, res: Response){
     const {id} = req.params;
     const comments = await pool.query(`
@@ -194,11 +229,20 @@ export async function postAffirmativeComment(req: Request, res: Response){
     const argumentId = Number(id);
 
     try{
+        const { abused } = await checkForAbuse(input);
+        if(abused){
+            await pool.query(`
+                    UPDATE users
+                    SET logic_score = logic_score - 4
+                    WHERE id = $1;
+                `,[userId])
+            return res.status(201).json({abused: abused})
+        }
         await pool.query(`
             INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'for')
             `,[argumentId, userId, input])
         await updateAnalysis(argumentId, 'for', userId, input);
-            res.status(201).json({message: "Successfully comment posted!"})
+        res.status(201).json({message: "Successfully comment posted!"})
     } catch(err){
         console.log(err)
         res.status(500).json({error: "Error in comment posting!"})
@@ -212,6 +256,15 @@ export async function postNegativeComment(req: Request, res: Response){
     const argumentId = Number(id);
 
     try{
+        const { abused } = await checkForAbuse(input);
+        if(abused){
+            await pool.query(`
+                    UPDATE users
+                    SET logic_score = logic_score - 4
+                    WHERE id = $1;
+                `,[userId])
+            return res.status(201).json({abused: abused})
+        }
         await pool.query(`
             INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'against')
             `,[argumentId, userId, input])

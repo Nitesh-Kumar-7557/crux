@@ -138,7 +138,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
             type="button"
           >
-            SUBMIT TO THE ARBITER
+            Check eligibility
             {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><RiRobot3Line /></span>}
           </button>}
         </div>
