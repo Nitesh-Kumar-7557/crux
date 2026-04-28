@@ -1,8 +1,55 @@
 import type { Response, Request } from "express";
 import pool from "../db/index.js";
-import { groqGPT } from "../ai/groq.js";
+import { groqGPT, groqLlama } from "../ai/groq.js";
 import { jsonrepair } from "jsonrepair";
 
+async function updateDesciption(user_id: number){
+    const {rows} = await pool.query(`
+            SELECT content
+            FROM arguments
+            WHERE user_id = $1;
+        `,[user_id])
+    const allPastArguments = rows;
+
+    const systemPrompt = `You are a behavioral analyst for CRUX — a high-stakes intellectual debate arena.
+
+        You will be given a list of argument statements posted by a debater.
+        Your job: infer who this person is as a thinker — their intellectual identity, not a summary of their topics.
+
+        RETURN ONLY raw JSON: {"newDescription": "string"}
+        No markdown. No explanation.
+
+        RULES:
+        - 2 sentences maximum. Hard limit.
+        - Do NOT mention any specific argument, topic, or subject they debated.
+        - DO infer: how they think, what kind of mind they have, what drives their positions
+        - Read between the lines — are they a systems thinker? A moral absolutist? A contrarian? A pragmatist?
+        - Write in third person. Present tense.
+        - Tone: sharp, editorial, like a profile in a serious magazine
+        - It should read like a character description, not a resume
+
+        GOOD EXAMPLE:
+        "Operates at the intersection of moral philosophy and structural power, where idealism meets institutional reality. Drawn instinctively to the arguments others refuse to make."
+
+        BAD EXAMPLE:
+        "Has debated topics related to AI, economics, and climate policy across multiple sessions."`;
+
+    const userPrompt = `ARGUMENTS POSTED:
+        ${allPastArguments.map((r: { content: string }, i: number) => `${i + 1}. "${r.content}"`).join('\n')}
+
+        Analyze the pattern. Write the debater's intellectual identity. Return raw JSON only.`;
+
+    const raw = await groqLlama(systemPrompt, userPrompt)
+
+    const repaired = jsonrepair(raw);
+    const parsed = JSON.parse(repaired);
+
+    await pool.query(`
+            UPDATE users
+            SET description = $2
+            WHERE id = $1;
+        `,[user_id, parsed.newDescription])
+}
 
 export async function addNewArgument(req: Request, res: Response) {
     const data: {
@@ -68,6 +115,7 @@ export async function addNewArgument(req: Request, res: Response) {
             [data.user_id, data.content_keyword, data.content, data.domain, parsed.for_analysis, parsed.against_analysis],
         );
 
+        await updateDesciption(data.user_id);
 
         return res.status(200).json({ message: `Argument with id: ${rows[0].id} added successfully!` })
 

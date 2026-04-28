@@ -53,7 +53,7 @@ const Navbar = () => {
         {/* <span className="cursor-pointer text-gray-500 hover:text-primary-container transition-colors">
           <IoIosNotificationsOutline size={31} />
         </span> */}
-        <Link href={user ? '/profile' : '/login'} className={`cursor-pointer ${pathname === '/profile' ? 'border-b-2 border-primary-container pb-1 text-primary-container':''} text-gray-500 hover:text-primary-container transition-colors`}>
+        <Link href={user ? `/profile/${user.id}` : '/login'} className={`cursor-pointer ${pathname === '/profile' ? 'border-b-2 border-primary-container pb-1 text-primary-container':''} text-gray-500 hover:text-primary-container transition-colors`}>
           <CgProfile size={26} />
         </Link>
       </div>

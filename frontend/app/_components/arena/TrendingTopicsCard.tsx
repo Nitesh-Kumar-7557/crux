@@ -2,7 +2,7 @@ import { TrendingTopicsCardProps } from "@/app/types";
 
 const TrendingTopicsCard = ({topic,changePercentage,arguments: argumentsCount,liveBattles}:TrendingTopicsCardProps) => {
   return (
-    <div className="group cursor-pointer">
+    <div className="group cursor-default">
       <div className="flex justify-between items-start mb-1">
         <span className="font-body capitalize text-sm font-bold group-hover:text-primary transition-colors">
           {topic}

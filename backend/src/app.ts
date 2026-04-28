@@ -9,6 +9,7 @@ import commentRoutes from './routes/comment.route.js';
 import arenaRoutes from './routes/arena.route.js';
 import aiRoutes from './routes/ai.route.js';
 import likeRoutes from './routes/like.route.js';
+import profileRoutes from './routes/profile.route.js';
 
 
 
@@ -33,6 +34,7 @@ app.use("/comment",commentRoutes)
 app.use("/arena",arenaRoutes)
 app.use("/ai",aiRoutes)
 app.use("/like",likeRoutes)
+app.use("/profile",profileRoutes)
 
 
 

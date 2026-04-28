@@ -1,25 +1,28 @@
 import { TopDebatersCardProps } from "@/app/types";
+import Link from "next/link";
 
 const TopDebatersCard = ({
   rank,
   avatar_url,
   name,
   logicScore,
+  id,
 }: {
   rank: number;
   avatar_url: string;
   name: string;
   logicScore: number;
+  id: number;
 }) => {
   return (
-    <div className="flex items-center gap-4 p-3 bg-surface-container-low hover:bg-surface-container-high transition-colors">
+    <Link href={`/profile/${id}`} className="flex cursor-pointer items-center gap-4 p-3 bg-surface-container-low hover:bg-surface-container-high transition-colors">
       <span
         className={`font-label ${rank !== 1 ? "text-outline" : "text-primary-container"} text-xs w-4`}
       >
         {rank < 10 ? `0${rank}` : rank}
       </span>
       <img
-        className="w-10 grayscale-80 h-10 border border-outline-variant/30 hover:grayscale-0 transition-all"
+        className="w-10 grayscale-60 h-10 border border-outline-variant/30 hover:grayscale-0 transition-all"
         data-alt="minimalist avatar of a scholarly man with a grey beard and sharp intelligent eyes"
         src={avatar_url}
       />
@@ -29,7 +32,7 @@ const TopDebatersCard = ({
           {logicScore} logic score
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

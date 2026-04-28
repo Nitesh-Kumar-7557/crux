@@ -5,7 +5,11 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const ReputationBreakdown = ({data,logicScore,citationRatio,fallacyRate}:ReputationBreakdownProps) => {
+const ReputationBreakdown = ({data}:ReputationBreakdownProps) => {
+
+  const max = Math.max(...data)
+  const maxIndex = data.indexOf(max)
+
   return (
     <div className="lg:col-span-8 bg-surface-container py-8 px-5 relative overflow-hidden">
       <div className="flex justify-between items-start mb-12">
@@ -16,20 +20,6 @@ const ReputationBreakdown = ({data,logicScore,citationRatio,fallacyRate}:Reputat
           <span className="font-label text-[10px] text-outline uppercase tracking-widest">
             Argument Quality Over Time
           </span>
-        </div>
-        <div className="flex gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-primary"></div>
-            <span className="font-label text-[10px] text-on-surface">
-              COHERENCE
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-secondary"></div>
-            <span className="font-label text-[10px] text-on-surface">
-              EVIDENCE
-            </span>
-          </div>
         </div>
       </div>
       {/* <!-- Custom Mock Data Viz --> */}
@@ -44,7 +34,7 @@ const ReputationBreakdown = ({data,logicScore,citationRatio,fallacyRate}:Reputat
         {/* <!-- Bars (Representing data points) --> */}
 
         {data.map((e,i)=> (
-          e === Math.max(...data) ? 
+          i === maxIndex ? 
           <div key={i} className={`flex-1 bg-primary relative`} style={{height: `${e}%`}}>
             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface-bright p-2 text-[10px] font-label whitespace-nowrap z-10">
               PEAK PERFORMANCE
@@ -52,28 +42,6 @@ const ReputationBreakdown = ({data,logicScore,citationRatio,fallacyRate}:Reputat
           </div> :
           <div key={i} className={`flex-1 bg-surface-container-high hover:bg-primary transition-colors cursor-crosshair`} style={{height: `${e}%`}}></div>
         ))}
-      </div>
-      <div className="mt-8 grid grid-cols-3 gap-8">
-        <div>
-          <span className="font-label text-xs text-outline block mb-1">
-            LOGIC SCORE
-          </span>
-          <span className={`${newsreader.className} text-2xl font-bold`}>{logicScore}</span>
-        </div>
-        <div>
-          <span className="font-label text-xs text-outline block mb-1">
-            CITATION RATIO
-          </span>
-          <span className={`${newsreader.className} text-2xl font-bold`}>{citationRatio}</span>
-        </div>
-        <div>
-          <span className="font-label text-xs text-outline block mb-1">
-            FALLACY RATE
-          </span>
-          <span className={`${newsreader.className} text-2xl font-bold text-secondary`}>
-            {fallacyRate}%
-          </span>
-        </div>
       </div>
     </div>
   );

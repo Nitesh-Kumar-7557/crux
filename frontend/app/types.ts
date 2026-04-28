@@ -37,6 +37,8 @@ export type TrendingTopicsCardData = TrendingTopicsCardProps[]
 export interface TopDebatersCardProps {
     name: string;
     logicScore: number;
+    id: number;
+    rank: number;
 }
 export type TopDebatersCardData = TopDebatersCardProps[]
 

@@ -12,9 +12,6 @@ export interface UserHeadInfoProps {
 
 export interface ReputationBreakdownProps {
     data: number[];
-    logicScore: number;
-    citationRatio: string;
-    fallacyRate: number;
 }
 
 
@@ -22,10 +19,7 @@ interface statementData {
     id: number;
     title: string;
 }
-export interface ActiveStatementsProps {
-    sanctionedData: statementData[];
-    provisionalData: statementData[];
-}
+export type ActiveStatementsProps = statementData[];
 
 
 export interface DebateHistoryProps {
