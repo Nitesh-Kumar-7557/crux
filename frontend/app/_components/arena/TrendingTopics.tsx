@@ -10,7 +10,7 @@ const TrendingTopics = ({data}:{data: TrendingTopicsCardData}) => {
             Trending Topics
           </h4>
           <div className="space-y-4">
-            {data.map((e,i)=>(
+            {data.length > 0 && data.map((e,i)=>(
                 <TrendingTopicsCard key={i} topic={e.topic} changePercentage={e.changePercentage} arguments={e.arguments} liveBattles={e.liveBattles}/>
             ))}
           </div>

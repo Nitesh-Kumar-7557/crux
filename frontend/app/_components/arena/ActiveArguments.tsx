@@ -18,8 +18,6 @@ const ActiveArguments = ({
   trendingArenaCardData: TrendingArenaCardData;
 }) => {
   const [activeTab, setActiveTab] = useState("trending");
-  const hasAnyTrendingData =
-    mainTrendingArenaCardData.length > 0 || trendingArenaCardData.length > 0;
 
   const changeActive = (e: string) => {
     setActiveTab(e);
@@ -32,9 +30,9 @@ const ActiveArguments = ({
         changeActive={changeActive}
       />
       {activeTab === "trending" &&
-        (hasAnyTrendingData ? (
+        (mainTrendingArenaCardData.length > 0 &&  trendingArenaCardData.length > 0 ? (
           <div>
-            {mainTrendingArenaCardData.map((e, i) => (
+            {mainTrendingArenaCardData.length > 0 && mainTrendingArenaCardData.map((e, i) => (
               <LiveArenaCard
                 key={i}
                 domain={e.domain}
@@ -49,7 +47,7 @@ const ActiveArguments = ({
               />
             ))}
             <div className="mb-5 md:flex md:flex-wrap md:justify-between">
-              {trendingArenaCardData.map(
+              {mainTrendingArenaCardData.length > 0 && trendingArenaCardData.map(
                 (e, i) =>
                   (mainTrendingArenaCardData.length === 0 || i !== 0) && (
                     <TrendingArenaCard

@@ -18,9 +18,11 @@ const ArenaSidebar = () => {
   useEffect(()=>{
     async function getData(){
       const {data} = await api.get('/arena/sidebar')
-      setTrendingTopicsData(data.data1)
-      setTopDebatersData(data.data2)
-      setSystemHealthData(data.data3[0])
+      if(data.length !== 0){
+        setTrendingTopicsData(data.data1)
+        setTopDebatersData(data.data2)
+        setSystemHealthData(data.data3[0])
+      }
     }
     getData();
 
