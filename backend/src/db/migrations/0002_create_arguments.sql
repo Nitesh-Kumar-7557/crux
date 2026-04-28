@@ -3,7 +3,7 @@ CREATE TABLE arguments (
     user_id INT NOT NULL,
     content TEXT,
     content_keyword TEXT,
-    domain VARCHAR(20),
+    domain VARCHAR(40),
     for_analysis TEXT,
     against_analysis TEXT,
     affirmative INT DEFAULT 50,
