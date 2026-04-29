@@ -104,7 +104,7 @@ docker compose -f docker-compose.dev.yml up -d
 This will ->  Start a PostgreSQL instance on port `5432` and PgAdmin on port `5051`
 
 ```bash
-cd backend
+cd backend && npm i
 ```
 ```bash
 npm run db-init  
@@ -122,7 +122,7 @@ This will ->  Start the Express backend on port `8000`
 Now on a new terminal window
 
 ```bash
-cd frontend && npm run dev
+cd frontend && npm i && npm run dev
 ```
 
 This will ->  Start the Next.js frontend on port `3000`

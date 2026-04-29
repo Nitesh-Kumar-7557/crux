@@ -8,7 +8,7 @@
     "db:seed": "node dist/db/seed.js",
     "start": "npm run db:migrate && node dist/index.js",
     "build": "rimraf dist && npx tsc",
-    "dev": "npm run db:migrate:dev && npx tsx watch src/index.ts",
+    "dev": "npx tsx watch src/index.ts",
     "db:migrate:dev": "npx tsx src/db/migrate.ts",
     "db:seed:dev": "npx tsx src/db/seed.ts",
     "db-init": "npm run db:migrate:dev && npm run db:seed:dev",
