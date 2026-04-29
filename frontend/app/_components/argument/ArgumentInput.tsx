@@ -29,6 +29,7 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
   if (!mounted || !user) return null;
 
   async function handleAffirmativeBtn() {
+    if(input.length === 0) return;
     const { data } = await api.post(`/comment/affirmative/${argumentId}`, {
       userId: user?.id,
       input,
@@ -41,6 +42,7 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
     }
   }
   async function handleNegativeBtn() {
+    if(input.length === 0) return;
     const { data } = await api.post(`/comment/negative/${argumentId}`, {
       userId: user?.id,
       input,
