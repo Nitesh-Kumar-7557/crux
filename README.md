@@ -1,4 +1,7 @@
-# CRUX — The Intellectual Arena
+<h1>
+  <img src="./frontend/app/favicon.ico" width="32" height="32" style="vertical-align: middle;" alt="Crux Logo" />
+  CRUX — The Intellectual Arena
+</h1>
 
 > *One claim. One arena. No neutral ground.*
 
