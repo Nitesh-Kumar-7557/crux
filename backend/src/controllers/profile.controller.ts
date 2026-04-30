@@ -1,7 +1,7 @@
 import type { Response, Request } from "express";
 import pool from "../db/index.js";
 
-function convertLogicScore(score: number){
+function convertLogicScore(score: number) {
   // Beginner       -> B   0-50
   // Intermediate   -> B+  50-100
   // Skilled        -> A   100-150
@@ -9,44 +9,42 @@ function convertLogicScore(score: number){
   // Master         -> M   200+
   let reputation = "beginner";
   let grade = "B";
-  if(score >= 200){
+  if (score >= 200) {
     reputation = "master";
     grade = "M";
-  }
-  else if(score >= 150){
+  } else if (score >= 150) {
     reputation = "expert";
     grade = "A+";
-  }
-  else if(score >= 100){
+  } else if (score >= 100) {
     reputation = "skilled";
     grade = "A";
-  }
-  else if(score >= 50){
+  } else if (score >= 50) {
     reputation = "intermediate";
     grade = "B+";
   }
 
   return {
     reputation: reputation,
-    grade: grade
-  }
-
-
+    grade: grade,
+  };
 }
 
-export async function getProfileDataById(req: Request, res: Response){
-    const { id } = req.params;
+export async function getProfileDataById(req: Request, res: Response) {
+  const { id } = req.params;
 
-    try{
-
-        const data1 = await pool.query(`
+  try {
+    const data1 = await pool.query(
+      `
                 SELECT name, description, logic_score
                 FROM users
                 WHERE id = $1;
-            `,[id])
-        const logicScore = Number(data1.rows[0].logic_score);
+            `,
+      [id],
+    );
+    const logicScore = Number(data1.rows[0].logic_score);
 
-        const rankQuery = await pool.query(`
+    const rankQuery = await pool.query(
+      `
             SELECT COUNT(*) + 1 AS global_rank
             FROM users
             WHERE 
@@ -54,48 +52,53 @@ export async function getProfileDataById(req: Request, res: Response){
                     WHEN $2 > 0 THEN logic_score > $2
                     ELSE logic_score = 0 AND id < $1
                 END;
-        `, [id, logicScore])
+        `,
+      [id, logicScore],
+    );
 
-        const globalRank = Number(rankQuery.rows[0].global_rank);
-        
-        const userHeadInfo = {
-            name: data1.rows[0].name,
-            level: convertLogicScore(logicScore).reputation,
-            description: data1.rows[0].description,
-            reputation: data1.rows[0].logic_score,
-            globalRank: globalRank
-        }
+    const globalRank = Number(rankQuery.rows[0].global_rank);
 
-        const data2 = await pool.query(`
+    const userHeadInfo = {
+      name: data1.rows[0].name,
+      level: convertLogicScore(logicScore).reputation,
+      description: data1.rows[0].description,
+      reputation: data1.rows[0].logic_score,
+      globalRank: globalRank,
+    };
+
+    const data2 = await pool.query(
+      `
                 SELECT affirmative
                 FROM arguments
                 WHERE user_id = $1;
-            `,[id])
-        const scores: number[] = []
-        data2.rows.forEach(e => scores.push(e.affirmative))
-        const reputationBreakdownData = {
-            data: scores,
-        }
+            `,
+      [id],
+    );
+    const scores: number[] = [];
+    data2.rows.forEach((e) => scores.push(e.affirmative));
+    const reputationBreakdownData = {
+      data: scores,
+    };
 
-        const data3 = await pool.query(`
+    const data3 = await pool.query(
+      `
                 SELECT id, content AS title
                 FROM arguments
                 WHERE user_id = $1 
                 ORDER BY id DESC
                 LIMIT 3;
-            `,[id])
-        const activeStatementsData = data3.rows
-        
+            `,
+      [id],
+    );
+    const activeStatementsData = data3.rows;
 
-        res.status(200).json({
-            userHeadInfo,
-            reputationBreakdownData,
-            activeStatementsData,
-        })
-        
-    }
-    catch(err){
-        console.error(err)
-        res.status(500).json({error: "Internal server error!"})
-    }
+    res.status(200).json({
+      userHeadInfo,
+      reputationBreakdownData,
+      activeStatementsData,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error!" });
+  }
 }

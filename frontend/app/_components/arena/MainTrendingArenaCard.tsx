@@ -8,17 +8,37 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const MainTrendingArenaCard = ({username,domain,title,argumentNum,argumentQuality,affermativeScore,negativeScore,numOfUsers,argumentId}: MainTrendingArenaCardProps) => {
+const MainTrendingArenaCard = ({
+  username,
+  domain,
+  title,
+  argumentNum,
+  argumentQuality,
+  affermativeScore,
+  negativeScore,
+  numOfUsers,
+  argumentId,
+}: MainTrendingArenaCardProps) => {
   return (
     <div className="bg-surface-container-low mt-5 p-8 pb-4 border-l-2 border-primary group hover:bg-surface-container transition-colors relative overflow-hidden">
       <div className="flex items-center gap-3 mb-6">
-        <img alt="Aurelius_X" className="w-8 h-8 border border-outline-variant/30 grayscale hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY5Anp_D4xW6pJE78a2afpLChi3n-4n80CePZRl9k3_YW9rmmoew2pl6257BuP4_E8hZqh9u13uGYgZXQFhwsbwoQwM0JtnQaaLJBih9wYDfaGqm09iQ_YE538pVkDQcQ5bJaEJzREFPAXwM7dkiihuigd-a6g_2sXBdnGbZgtCFBNZD_NE9zLmWe5uqoqow7VHtx5Yp3eQL-KTBAZ4Pfku3J0sGV0VTFF9GDeJ3NFN_V0u5U6ybXJIEN8rTU4PrUeXh2MfvHK2bL6"/>
+        <img
+          alt="Aurelius_X"
+          className="w-8 h-8 border border-outline-variant/30 grayscale hover:grayscale-0 transition-all"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY5Anp_D4xW6pJE78a2afpLChi3n-4n80CePZRl9k3_YW9rmmoew2pl6257BuP4_E8hZqh9u13uGYgZXQFhwsbwoQwM0JtnQaaLJBih9wYDfaGqm09iQ_YE538pVkDQcQ5bJaEJzREFPAXwM7dkiihuigd-a6g_2sXBdnGbZgtCFBNZD_NE9zLmWe5uqoqow7VHtx5Yp3eQL-KTBAZ4Pfku3J0sGV0VTFF9GDeJ3NFN_V0u5U6ybXJIEN8rTU4PrUeXh2MfvHK2bL6"
+        />
         <div className="flex flex-col">
-        <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em]">Proposed By</span>
-        <span className="font-body text-xs font-bold text-on-surface">{username}</span>
+          <span className="font-label text-[10px] text-primary uppercase tracking-[0.2em]">
+            Proposed By
+          </span>
+          <span className="font-body text-xs font-bold text-on-surface">
+            {username}
+          </span>
         </div>
       </div>
-      <span className="font-label text-[10px] text-tertiary uppercase tracking-widest mb-3 block">{domain}</span>
+      <span className="font-label text-[10px] text-tertiary uppercase tracking-widest mb-3 block">
+        {domain}
+      </span>
       <h2
         className={`${newsreader.className} text-4xl leading-tight mb-4 transition-colors`}
       >
@@ -26,20 +46,30 @@ const MainTrendingArenaCard = ({username,domain,title,argumentNum,argumentQualit
       </h2>
       <div className="flex gap-5 border-b border-gray-800 pb-5">
         <span className="font-label [word-spacing:-4px] text-xs text-outline uppercase tracking-widest">
-          <LuMessageSquare className="inline text-primary" /> {argumentNum} {argumentNum === 1 ? 'Argument' : 'Arguments'}
+          <LuMessageSquare className="inline text-primary" /> {argumentNum}{" "}
+          {argumentNum === 1 ? "Argument" : "Arguments"}
         </span>
         <span className="font-label [word-spacing:-4px] text-xs text-outline uppercase tracking-widest">
-          <GoVerified className="inline text-tertiary" /> Argument Quality: {argumentQuality}
+          <GoVerified className="inline text-tertiary" /> Argument Quality:{" "}
+          {argumentQuality}
         </span>
       </div>
       <div className="py-5">
         <div className="flex justify-between font-label text-[10px] uppercase tracking-[0.25em] mb-3">
-          <span className="text-primary-container">Affirmative ({affermativeScore}%)</span>
+          <span className="text-primary-container">
+            Affirmative ({affermativeScore}%)
+          </span>
           <span className="text-secondary">Negative ({negativeScore}%)</span>
         </div>
         <div className="w-full h-5 flex gap-0.5">
-          <span className={`bg-primary-container`} style={{width:`${affermativeScore}%`}}></span>
-          <span className={`bg-secondary-container`} style={{width:`${negativeScore}%`}}></span>
+          <span
+            className={`bg-primary-container`}
+            style={{ width: `${affermativeScore}%` }}
+          ></span>
+          <span
+            className={`bg-secondary-container`}
+            style={{ width: `${negativeScore}%` }}
+          ></span>
         </div>
         <div className="mt-7 flex justify-between items-center">
           <div></div>
@@ -63,7 +93,10 @@ const MainTrendingArenaCard = ({username,domain,title,argumentNum,argumentQualit
               +{numOfUsers}
             </div>
           </div> */}
-          <Link href={`/argument/${argumentId}`} className="border border-primary/30 text-primary px-6 py-2 font-label uppercase tracking-widest text-[10px] hover:bg-primary/10 transition-colors">
+          <Link
+            href={`/argument/${argumentId}`}
+            className="border border-primary/30 text-primary px-6 py-2 font-label uppercase tracking-widest text-[10px] hover:bg-primary/10 transition-colors"
+          >
             Enter Argument
           </Link>
         </div>

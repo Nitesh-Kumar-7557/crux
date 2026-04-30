@@ -45,7 +45,6 @@ const NewestCard = ({
             </div>
           </div>
 
-          
           <h3 className={`${newsreader.className} text-2xl mb-4`}>"{title}"</h3>
         </div>
 
@@ -62,8 +61,8 @@ const NewestCard = ({
           </div>
           <div className="flex justify-between items-center font-label text-[10px] text-outline uppercase tracking-widest">
             <span className="font-label [word-spacing:-4px] text-xs text-outline uppercase tracking-widest">
-              <LuMessageSquare className="inline text-primary" />{" "}
-              {argumentNum} Arguments
+              <LuMessageSquare className="inline text-primary" /> {argumentNum}{" "}
+              Arguments
             </span>
             {affirmativescore > negativescore ? (
               <span className="text-primary-container">

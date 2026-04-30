@@ -1,9 +1,5 @@
-import React from 'react'
-
 const HighStakesTab = () => {
-  return (
-    <div>HighStakesTab</div>
-  )
-}
+  return <div>HighStakesTab</div>;
+};
 
-export default HighStakesTab
+export default HighStakesTab;

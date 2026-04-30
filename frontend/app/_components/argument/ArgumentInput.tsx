@@ -29,27 +29,27 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
   if (!mounted || !user) return null;
 
   async function handleAffirmativeBtn() {
-    if(input.length === 0) return;
+    if (input.length === 0) return;
     const { data } = await api.post(`/comment/affirmative/${argumentId}`, {
       userId: user?.id,
       input,
     });
     setInput("");
     if (data.abused) {
-      setWarning(true)
+      setWarning(true);
     } else {
       router.refresh();
     }
   }
   async function handleNegativeBtn() {
-    if(input.length === 0) return;
+    if (input.length === 0) return;
     const { data } = await api.post(`/comment/negative/${argumentId}`, {
       userId: user?.id,
       input,
     });
     setInput("");
     if (data.abused) {
-      setWarning(true)
+      setWarning(true);
     } else {
       router.refresh();
     }
@@ -81,42 +81,39 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
           </button>
         </div>
       </div>
-      {warning && 
-      <div
-        className="fixed bottom-32 right-6 z-60 max-w-sm bg-neutral-950 border-l-4 border-secondary p-4 shadow-[0_0_20px_rgba(255,82,93,0.1)] flex items-start gap-4"
-      >
-        <div className="shrink-0 mt-1">
-          <span
-            className="material-symbols-outlined text-secondary font-bold text-xl"
+      {warning && (
+        <div className="fixed bottom-32 right-6 z-60 max-w-sm bg-neutral-950 border-l-4 border-secondary p-4 shadow-[0_0_20px_rgba(255,82,93,0.1)] flex items-start gap-4">
+          <div className="shrink-0 mt-1">
+            <span className="material-symbols-outlined text-secondary font-bold text-xl">
+              <MdWarningAmber />
+            </span>
+          </div>
+          <div className="grow">
+            <h4 className="font-label text-[10px] uppercase tracking-[0.2em] text-secondary mb-1 font-bold">
+              Flagged for Abuse
+            </h4>
+            <p className="font-body text-xs leading-relaxed text-on-surface-variant">
+              Your latest contribution violates the Arena Constitution. Review
+              the{" "}
+              <Link
+                className="text-secondary underline underline-offset-2 hover:text-white"
+                href={"/rules"}
+              >
+                Rules of Engagement
+              </Link>{" "}
+              before posting again.
+            </p>
+          </div>
+          <button
+            className="shrink-0 text-outline hover:text-white cursor-pointer"
+            onClick={() => setWarning(false)}
           >
-            <MdWarningAmber />
-          </span>
+            <span className="material-symbols-outlined text-sm">
+              <IoMdClose />
+            </span>
+          </button>
         </div>
-        <div className="grow">
-          <h4 className="font-label text-[10px] uppercase tracking-[0.2em] text-secondary mb-1 font-bold">
-            Flagged for Abuse
-          </h4>
-          <p className="font-body text-xs leading-relaxed text-on-surface-variant">
-            Your latest contribution violates the Arena Constitution. Review the{" "}
-            <Link
-              className="text-secondary underline underline-offset-2 hover:text-white"
-              href={'/rules'}
-            >
-              Rules of Engagement
-            </Link>{" "}
-            before posting again.
-          </p>
-        </div>
-        <button
-          className="shrink-0 text-outline hover:text-white cursor-pointer"
-          onClick={()=> setWarning(false)}
-        >
-          <span className="material-symbols-outlined text-sm">
-            <IoMdClose />
-          </span>
-        </button>
-      </div>
-      }
+      )}
     </div>
   );
 };

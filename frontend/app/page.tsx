@@ -12,20 +12,20 @@ const Home = async () => {
   const trendingPayload = trendingResponse.data;
 
   const mainTrendingArenaCardData: MainTrendingArenaCardData = [
-      {
-        username: String(mainPayload.username ?? ""),
-        domain: String(mainPayload.domain ?? ""),
-        title: String(mainPayload.content ?? ""),
-        argumentNum:  Number(mainPayload.count_comments ?? 0),
-        argumentQuality: "high",
-        affermativeScore: Number(mainPayload.affirmative ?? 0),
-        negativeScore: Number(mainPayload.negative ?? 0),
-        numOfUsers: 18,
-        argumentId: mainPayload.argumentId
-          ? `CRX-${mainPayload.argumentId}-A`
-          : "",
-      },
-    ]
+    {
+      username: String(mainPayload.username ?? ""),
+      domain: String(mainPayload.domain ?? ""),
+      title: String(mainPayload.content ?? ""),
+      argumentNum: Number(mainPayload.count_comments ?? 0),
+      argumentQuality: "high",
+      affermativeScore: Number(mainPayload.affirmative ?? 0),
+      negativeScore: Number(mainPayload.negative ?? 0),
+      numOfUsers: 18,
+      argumentId: mainPayload.argumentId
+        ? `CRX-${mainPayload.argumentId}-A`
+        : "",
+    },
+  ];
 
   const trendingArenaCardData: TrendingArenaCardData = trendingPayload;
 

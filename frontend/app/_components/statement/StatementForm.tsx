@@ -1,6 +1,6 @@
 "use client";
 import { DomainClassification } from "@/app/statement/types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   MdEditNote,
   MdFilterList,
@@ -25,30 +25,29 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const userPromise: Promise<jwtPayload | null> = useUser();
 
   const [text, setText] = useState("");
-  const [allowInput, setAllowInput] = useState(true)
+  const [allowInput, setAllowInput] = useState(true);
   const [selectedDomain, setSelectedDomain] = useState("AI");
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [eligibility, setEligibility] = useState('');
-  const [domain, setDomain] = useState('');
-  const [feedback, setFeedback] = useState('Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.')
-  
+  const [eligibility, setEligibility] = useState("");
+  const [domain, setDomain] = useState("");
+  const [feedback, setFeedback] = useState(
+    "Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.",
+  );
 
- 
-
-  async function checkEligibility(){
+  async function checkEligibility() {
     setLoading(true);
-    setEligibility('pending');
-    const {data} = await api.post("/ai/statement", {
+    setEligibility("pending");
+    const { data } = await api.post("/ai/statement", {
       content: text,
-      domain: selectedDomain
-    })
-    setEligibility(data.eligibility)
-    setKeyword(data.keyword)
-    setFeedback(data.feedback)
-    setText(data.improved)
-    setAllowInput(false)
-    setDomain(data.domain)
+      domain: selectedDomain,
+    });
+    setEligibility(data.eligibility);
+    setKeyword(data.keyword);
+    setFeedback(data.feedback);
+    setText(data.improved);
+    setAllowInput(false);
+    setDomain(data.domain);
     setLoading(false);
   }
 
@@ -100,7 +99,9 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-600 text-on-surface resize-none`}
             placeholder="Make a claim worth fighting over..."
             value={text}
-            onChange={(e) => {allowInput && setText(e.target.value)}}
+            onChange={(e) => {
+              allowInput && setText(e.target.value);
+            }}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
             <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM 35 CHARACTERS</span>
@@ -126,28 +127,44 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
               ARBITER STANDING BY
             </span>
           </div>
-          {eligibility === 'pass' && <button
-            className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-            type="submit"
-          >
-            Broadcast Statement
-          <span className="material-symbols-outlined text-lg"><MdSensors /></span>
-          </button>}
-          {eligibility !== 'pass' && <button
-            onClick={()=> {if(text.length > 35) checkEligibility()}}
-            className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-            type="button"
-          >
-            Check eligibility
-            {(loading || eligibility === 'pending') ? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span> : <span className="material-symbols-outlined text-lg"><RiRobot3Line /></span>}
-          </button>}
+          {eligibility === "pass" && (
+            <button
+              className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              type="submit"
+            >
+              Broadcast Statement
+              <span className="material-symbols-outlined text-lg">
+                <MdSensors />
+              </span>
+            </button>
+          )}
+          {eligibility !== "pass" && (
+            <button
+              onClick={() => {
+                if (text.length > 35) checkEligibility();
+              }}
+              className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              type="button"
+            >
+              Check eligibility
+              {loading || eligibility === "pending" ? (
+                <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span>
+              ) : (
+                <span className="material-symbols-outlined text-lg">
+                  <RiRobot3Line />
+                </span>
+              )}
+            </button>
+          )}
         </div>
       </form>
-      { (eligibility) && 
+      {eligibility && (
         <div className="bg-surface-container-high border mt-6 border-outline-variant/50 p-6 relative overflow-hidden">
           <div className="relative z-10 flex flex-col gap-4">
             <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-outline-variant/30 pb-4">
-              <h3 className={`${newsreader.className} italic text-2xl text-primary`}>
+              <h3
+                className={`${newsreader.className} italic text-2xl text-primary`}
+              >
                 CRUX AI Validation
               </h3>
               <div className="flex items-center gap-3 bg-surface-container px-4 py-2 border border-primary/30 shadow-[0_0_15px_rgba(0,209,255,0.1)]">
@@ -172,7 +189,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             </div>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 };

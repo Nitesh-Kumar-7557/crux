@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { HiOutlineBolt } from "react-icons/hi2";
 import { LuLockKeyhole } from "react-icons/lu";
 import { MdOutlineEmail } from "react-icons/md";
@@ -13,15 +13,14 @@ const newsreader = Newsreader({
 });
 
 const Login = () => {
-
-  const [email,setEmail] = useState<string>('')
-  const [password,setPassword] = useState<string>('')
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const [error, setError] = useState("");
-  
+
   const router = useRouter();
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     const info = {
@@ -29,16 +28,15 @@ const Login = () => {
       password,
     };
 
-    try{
+    try {
       const response = await api.post("/user/login", info);
       localStorage.setItem("access_token", response.data.accessToken);
-      setTimeout(()=>{
-        router.push('/');
-      },1000)
-    } catch (err: any){
-      setError(err.response?.data?.error || "Something went wrong")
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Something went wrong");
     }
-
   }
 
   return (
@@ -46,12 +44,14 @@ const Login = () => {
       {/* <!-- Background Technical Layer --> */}
       <div className="absolute inset-0 technical-grid z-0"></div>
       <div className="absolute inset-0 bg-radial-at-c from-primary/5 via-transparent to-transparent z-0"></div>
-      
+
       {/* <!-- Login Container --> */}
       <div className="relative z-10 w-full max-w-md px-6">
         {/* <!-- Brand Header (Simplified for Login) --> */}
         <div className="text-center mb-12">
-          <h1 className={`text-4xl ${newsreader.className} italic tracking-tighter text-primary`}>
+          <h1
+            className={`text-4xl ${newsreader.className} italic tracking-tighter text-primary`}
+          >
             CRUX
           </h1>
           <div className="mt-2 inline-block">
@@ -63,7 +63,9 @@ const Login = () => {
         {/* <!-- Login Card --> */}
         <div className="bg-surface-container-low border-l-2 border-primary p-8 md:p-10 shadow-2xl relative">
           <header className="mb-8">
-            <h2 className={`text-3xl ${newsreader.className} italic text-on-surface leading-tight`}>
+            <h2
+              className={`text-3xl ${newsreader.className} italic text-on-surface leading-tight`}
+            >
               Login to the Arena
             </h2>
             <p className="text-on-surface-variant text-sm mt-2">
@@ -90,7 +92,7 @@ const Login = () => {
                   required={true}
                   type="email"
                   value={email}
-                  onChange={(e)=>setEmail(e.currentTarget.value)}
+                  onChange={(e) => setEmail(e.currentTarget.value)}
                 />
               </div>
             </div>
@@ -115,18 +117,20 @@ const Login = () => {
                   required={true}
                   type="password"
                   value={password}
-                  onChange={(e)=>setPassword(e.currentTarget.value)}
+                  onChange={(e) => setPassword(e.currentTarget.value)}
                 />
               </div>
               <div className="flex justify-between">
-                  <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">{error}</p>
-                  <a
-                    className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
-                    href="#"
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
+                <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">
+                  {error}
+                </p>
+                <a
+                  className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
+                  href="#"
+                >
+                  Forgot Password?
+                </a>
+              </div>
             </div>
             {/* <!-- Action Button --> */}
             <div className="pt-4">
@@ -147,7 +151,7 @@ const Login = () => {
               New to the protocol?
               <Link
                 className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary ml-2 transition-all"
-                href={'/register'}
+                href={"/register"}
               >
                 Join the Fray
               </Link>

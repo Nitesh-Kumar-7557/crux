@@ -1,4 +1,3 @@
-
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
 const newsreader = Newsreader({
@@ -13,13 +12,20 @@ const Challenge = () => {
         Your knowledge is the only currency here.
       </h2>
       <p className="font-body text-outline mb-10 max-w-2xl mx-auto">
-        Step into the arena and validate your claims against the global intellectual collective.
+        Step into the arena and validate your claims against the global
+        intellectual collective.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-6">
-        <Link href={'/'} className="bg-primary text-on-primary px-10 py-4 font-label font-bold tracking-widest uppercase hover:bg-primary-container transition-all">
+        <Link
+          href={"/"}
+          className="bg-primary text-on-primary px-10 py-4 font-label font-bold tracking-widest uppercase hover:bg-primary-container transition-all"
+        >
           Enter The Arena
         </Link>
-        <Link href={'/leaderboard'} className="border border-outline px-10 py-4 font-label font-bold tracking-widest uppercase hover:bg-on-surface hover:text-background transition-all">
+        <Link
+          href={"/leaderboard"}
+          className="border border-outline px-10 py-4 font-label font-bold tracking-widest uppercase hover:bg-on-surface hover:text-background transition-all"
+        >
           View Leaderboard
         </Link>
       </div>

@@ -8,7 +8,7 @@ import HighStakesTab from "./HighStakesTab";
 import { MainTrendingArenaCardData, TrendingArenaCardData } from "@/app/types";
 import TrendingArenaCard from "./TrendingArenaCard";
 
-const tabList = ["trending", "newest"];     // for future: "high stakes"
+const tabList = ["trending", "newest"]; // for future: "high stakes"
 
 const ActiveArguments = ({
   mainTrendingArenaCardData,
@@ -30,43 +30,48 @@ const ActiveArguments = ({
         changeActive={changeActive}
       />
       {activeTab === "trending" &&
-        (mainTrendingArenaCardData.length > 0 &&  trendingArenaCardData.length > 0 ? (
+        (mainTrendingArenaCardData.length > 0 &&
+        trendingArenaCardData.length > 0 ? (
           <div>
-            {mainTrendingArenaCardData.length > 0 && mainTrendingArenaCardData.map((e, i) => (
-              <LiveArenaCard
-                key={i}
-                domain={e.domain}
-                username={e.username}
-                title={e.title}
-                argumentNum={e.argumentNum}
-                argumentQuality={e.argumentQuality}
-                affermativeScore={e.affermativeScore}
-                negativeScore={e.negativeScore}
-                numOfUsers={e.numOfUsers}
-                argumentId={e.argumentId}
-              />
-            ))}
+            {mainTrendingArenaCardData.length > 0 &&
+              mainTrendingArenaCardData.map((e, i) => (
+                <LiveArenaCard
+                  key={i}
+                  domain={e.domain}
+                  username={e.username}
+                  title={e.title}
+                  argumentNum={e.argumentNum}
+                  argumentQuality={e.argumentQuality}
+                  affermativeScore={e.affermativeScore}
+                  negativeScore={e.negativeScore}
+                  numOfUsers={e.numOfUsers}
+                  argumentId={e.argumentId}
+                />
+              ))}
             <div className="mb-5 md:flex md:flex-wrap md:justify-between">
-              {mainTrendingArenaCardData.length > 0 && trendingArenaCardData.map(
-                (e, i) =>
-                  (mainTrendingArenaCardData.length === 0 || i !== 0) && (
-                    <TrendingArenaCard
-                      key={i}
-                      username={e.username}
-                      domain={e.domain}
-                      title={e.title}
-                      affirmativescore={e.affirmativescore}
-                      negativescore={e.negativescore}
-                      argumentid={e.argumentid}
-                      active_minds={e.active_minds}
-                    />
-                  ),
-              )}
+              {mainTrendingArenaCardData.length > 0 &&
+                trendingArenaCardData.map(
+                  (e, i) =>
+                    (mainTrendingArenaCardData.length === 0 || i !== 0) && (
+                      <TrendingArenaCard
+                        key={i}
+                        username={e.username}
+                        domain={e.domain}
+                        title={e.title}
+                        affirmativescore={e.affirmativescore}
+                        negativescore={e.negativescore}
+                        argumentid={e.argumentid}
+                        active_minds={e.active_minds}
+                      />
+                    ),
+                )}
             </div>
             <ThesisCard />
           </div>
         ) : (
-          <div><ThesisCard /></div>
+          <div>
+            <ThesisCard />
+          </div>
         ))}
       {activeTab === "newest" && <NewestTab />}
       {activeTab === "high stakes" && <HighStakesTab />}

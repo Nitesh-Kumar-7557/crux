@@ -93,65 +93,83 @@ const PROBABILITY_SYSTEM_PROMPT = `You are a debate probability engine.
 
         RETURN ONLY: {"affirmative": number, "negative": number}`;
 
-
-
-async function updateProbability(argumentId: number){
-    const {rows} = await pool.query(`
+async function updateProbability(argumentId: number) {
+  const { rows } = await pool.query(
+    `
             SELECT content, for_analysis, against_analysis
             FROM arguments
             WHERE id = $1;
-        `,[argumentId])
+        `,
+    [argumentId],
+  );
 
-    const userPrompt = `STATEMENT: ${rows[0].content}
+  const userPrompt = `STATEMENT: ${rows[0].content}
 
         FOR analysis: ${rows[0].for_analysis}
         AGAINST analysis: ${rows[0].against_analysis}
 
         Assign the probability split. Return raw JSON only.`;
 
-    const raw = await groqGPT(PROBABILITY_SYSTEM_PROMPT, userPrompt);
+  const raw = await groqGPT(PROBABILITY_SYSTEM_PROMPT, userPrompt);
 
-    const repaired = jsonrepair(raw);
-    const parsed = JSON.parse(repaired);
+  const repaired = jsonrepair(raw);
+  const parsed = JSON.parse(repaired);
 
-    const affirmative = Math.round(parsed.affirmative);
-    const negative = 100 - affirmative;
+  const affirmative = Math.round(parsed.affirmative);
+  const negative = 100 - affirmative;
 
-    await pool.query(`
+  await pool.query(
+    `
             UPDATE arguments
             SET affirmative = $1,
                 negative = $2
             WHERE id = $3
-        `,[affirmative, negative, argumentId])
-
+        `,
+    [affirmative, negative, argumentId],
+  );
 }
 
-async function updateAnalysis(argumentId: number, side: string, userId: string, input: string, first: boolean = false){
-
-    const data1 = await pool.query(`
+async function updateAnalysis(
+  argumentId: number,
+  side: string,
+  userId: string,
+  input: string,
+  first: boolean = false,
+) {
+  const data1 = await pool.query(
+    `
             SELECT content FROM arguments WHERE id = $1;
-        `,[argumentId])
-    const data2 = await pool.query(`
+        `,
+    [argumentId],
+  );
+  const data2 = await pool.query(
+    `
             SELECT name FROM users WHERE id = $1;
-        `,[userId])
-    const data3 = await pool.query(`
+        `,
+    [userId],
+  );
+  const data3 = await pool.query(
+    `
                 SELECT ${side}_analysis
                 FROM arguments
                 WHERE id = $1;
-            `,[argumentId])
-    const argumentContent = data1.rows[0].content;
-    const name = data2.rows[0].name;
-    const oldAnalysis = side === 'for' ? data3.rows[0].for_analysis : data3.rows[0].against_analysis ;
+            `,
+    [argumentId],
+  );
+  const argumentContent = data1.rows[0].content;
+  const name = data2.rows[0].name;
+  const oldAnalysis =
+    side === "for"
+      ? data3.rows[0].for_analysis
+      : data3.rows[0].against_analysis;
 
-    const userPrompt = first
-        ?
-        `STATEMENT: "${argumentContent}"
+  const userPrompt = first
+    ? `STATEMENT: "${argumentContent}"
         SIDE: ${side.toUpperCase()}
         AUTHOR: ${name}
         COMMENT: "${input}"
         Score and analyze. Return raw JSON only.`
-        :
-        `STATEMENT: "${argumentContent}"
+    : `STATEMENT: "${argumentContent}"
         SIDE: ${side.toUpperCase()}
         EXISTING ANALYSIS:
         ${oldAnalysis}
@@ -159,131 +177,156 @@ async function updateAnalysis(argumentId: number, side: string, userId: string, 
         COMMENT: "${input}"
         The author's real name is "${name}" — use this name in the analysis, not any bold label from the existing analysis.
         Score and update analysis. Return raw JSON only.`;
-    
-    const raw = await groqGPT(ANALYST_SYSTEM_PROMPT, userPrompt)
 
-    const repaired = jsonrepair(raw);
-    const parsed = JSON.parse(repaired);
+  const raw = await groqGPT(ANALYST_SYSTEM_PROMPT, userPrompt);
 
-    const points = Math.round(parsed.points)
+  const repaired = jsonrepair(raw);
+  const parsed = JSON.parse(repaired);
 
-    await pool.query(`
+  const points = Math.round(parsed.points);
+
+  await pool.query(
+    `
             UPDATE users
             SET logic_score = logic_score + $2
             WHERE id = $1;
-        `,[userId, points])
+        `,
+    [userId, points],
+  );
 
-    await pool.query(`
+  await pool.query(
+    `
             UPDATE arguments
             SET ${side}_analysis = $1
             WHERE id = $2;
-        `,[parsed.newAnalysis, argumentId])
+        `,
+    [parsed.newAnalysis, argumentId],
+  );
 
-    const { rows } = await pool.query(`
+  const { rows } = await pool.query(
+    `
         SELECT 
             COUNT(CASE WHEN side = 'for' THEN 1 END) AS for_count,
             COUNT(CASE WHEN side = 'against' THEN 1 END) AS against_count
         FROM comments
         WHERE argument_id = $1;
-    `, [argumentId]);
+    `,
+    [argumentId],
+  );
 
-    const forCount = Number(rows[0].for_count);
-    const againstCount = Number(rows[0].against_count);
+  const forCount = Number(rows[0].for_count);
+  const againstCount = Number(rows[0].against_count);
 
-    if (forCount >= 1 && againstCount >= 1) {
-        await updateProbability(argumentId);
-    }
-
+  if (forCount >= 1 && againstCount >= 1) {
+    await updateProbability(argumentId);
+  }
 }
 
-async function checkForAbuse(input: string){
+async function checkForAbuse(input: string) {
+  const userPrompt = `Comment: "${input}"`;
 
-    const userPrompt = `Comment: "${input}"`;
+  const raw = await groqGPT(ABUSE_SYSTEM_PROMPT, userPrompt);
 
-    const raw = await groqGPT(ABUSE_SYSTEM_PROMPT, userPrompt)
+  const repaired = jsonrepair(raw);
+  const parsed = JSON.parse(repaired);
 
-    const repaired = jsonrepair(raw);
-    const parsed = JSON.parse(repaired);
-
-    return parsed;
-
+  return parsed;
 }
 
-export async function getComments(req: Request, res: Response){
-    const {id} = req.params;
-    const comments = await pool.query(`
+export async function getComments(req: Request, res: Response) {
+  const { id } = req.params;
+  const comments = await pool.query(
+    `
             SELECT c.id AS comment_id, u.username, c.side, u.logic_score, c.content, c.likes, u.id AS post_user_id
             FROM comments c
             JOIN users u ON c.user_id = u.id
             WHERE c.argument_id = $1;
-        `,[Number(id)])
-    res.status(200).json({comments: comments.rows})
+        `,
+    [Number(id)],
+  );
+  res.status(200).json({ comments: comments.rows });
 }
 
-export async function postAffirmativeComment(req: Request, res: Response){
-    const {id} = req.params;
-    const {userId, input} = req.body;
-    const argumentId = Number(id);
+export async function postAffirmativeComment(req: Request, res: Response) {
+  const { id } = req.params;
+  const { userId, input } = req.body;
+  const argumentId = Number(id);
 
-    try{
-        const { abused } = await checkForAbuse(input);
-        if(abused){
-            await pool.query(`
+  try {
+    const { abused } = await checkForAbuse(input);
+    if (abused) {
+      await pool.query(
+        `
                     UPDATE users
                     SET logic_score = logic_score - 4
                     WHERE id = $1;
-                `,[userId])
-            return res.status(201).json({abused: abused})
-        }
-        await pool.query(`
+                `,
+        [userId],
+      );
+      return res.status(201).json({ abused: abused });
+    }
+    await pool.query(
+      `
             INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'for')
-            `,[argumentId, userId, input])
-        const { rows } = await pool.query(`
+            `,
+      [argumentId, userId, input],
+    );
+    const { rows } = await pool.query(
+      `
             SELECT id FROM comments WHERE argument_id = $1 AND side = 'for';
-            `,[argumentId])
-        if(rows.length === 1){
-            await updateAnalysis(argumentId, 'for', userId, input, true);
-        } else{
-            await updateAnalysis(argumentId, 'for', userId, input);
-        }
-        res.status(201).json({message: "Successfully comment posted!"})
-    } catch(err){
-        console.log(err)
-        res.status(500).json({error: "Error in comment posting!"})
+            `,
+      [argumentId],
+    );
+    if (rows.length === 1) {
+      await updateAnalysis(argumentId, "for", userId, input, true);
+    } else {
+      await updateAnalysis(argumentId, "for", userId, input);
     }
-
+    res.status(201).json({ message: "Successfully comment posted!" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Error in comment posting!" });
+  }
 }
 
-export async function postNegativeComment(req: Request, res: Response){
-    const {id} = req.params;
-    const {userId, input} = req.body;
-    const argumentId = Number(id);
+export async function postNegativeComment(req: Request, res: Response) {
+  const { id } = req.params;
+  const { userId, input } = req.body;
+  const argumentId = Number(id);
 
-    try{
-        const { abused } = await checkForAbuse(input);
-        if(abused){
-            await pool.query(`
+  try {
+    const { abused } = await checkForAbuse(input);
+    if (abused) {
+      await pool.query(
+        `
                     UPDATE users
                     SET logic_score = logic_score - 4
                     WHERE id = $1;
-                `,[userId])
-            return res.status(201).json({abused: abused})
-        }
-        await pool.query(`
-            INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'against')
-            `,[argumentId, userId, input])
-        const { rows } = await pool.query(`
-            SELECT id FROM comments WHERE argument_id = $1 AND side = 'against';
-            `,[argumentId])
-        if(rows.length === 1){
-            await updateAnalysis(argumentId, 'against', userId, input, true);
-        } else{
-            await updateAnalysis(argumentId, 'against', userId, input);
-        }
-        res.status(201).json({message: "Successfully comment posted!"})
-    } catch(err){
-        console.log(err)
-        res.status(500).json({error: "Error in comment posting!"})
+                `,
+        [userId],
+      );
+      return res.status(201).json({ abused: abused });
     }
-
+    await pool.query(
+      `
+            INSERT INTO comments(argument_id, user_id, content, side) VALUES ($1,$2,$3,'against')
+            `,
+      [argumentId, userId, input],
+    );
+    const { rows } = await pool.query(
+      `
+            SELECT id FROM comments WHERE argument_id = $1 AND side = 'against';
+            `,
+      [argumentId],
+    );
+    if (rows.length === 1) {
+      await updateAnalysis(argumentId, "against", userId, input, true);
+    } else {
+      await updateAnalysis(argumentId, "against", userId, input);
+    }
+    res.status(201).json({ message: "Successfully comment posted!" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Error in comment posting!" });
+  }
 }

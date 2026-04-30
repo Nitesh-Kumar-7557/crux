@@ -1,8 +1,8 @@
-'use client';
-import { useEffect, useState } from 'react'
-import NewestCard from './NewestCard'
-import api from '@/app/axios';
-import { NewestCardProps } from '@/app/types';
+"use client";
+import { useEffect, useState } from "react";
+import NewestCard from "./NewestCard";
+import api from "@/app/axios";
+import { NewestCardProps } from "@/app/types";
 
 export function timeAgo(timestamp: string): string {
   const now = Date.now();
@@ -10,42 +10,52 @@ export function timeAgo(timestamp: string): string {
   const seconds = Math.floor((now - past) / 1000);
 
   if (seconds < 60) return `${seconds} seconds ago`;
-  
+
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes} minutes ago`;
-  
+
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours} hours ago`;
-  
+
   const days = Math.floor(hours / 24);
   if (days < 30) return `${days} days ago`;
-  
+
   const months = Math.floor(days / 30);
   if (months < 12) return `${months} months ago`;
-  
+
   const years = Math.floor(months / 12);
   return `${years} years ago`;
 }
 
 const NewestTab = () => {
+  const [cardsData, setCardsData] = useState<NewestCardProps[]>([]);
 
-  const [cardsData, setCardsData] = useState<NewestCardProps[]>([])
-
-  useEffect(()=>{
-    async function getCardsData(){
-      const {data} = await api.get('/arena/active/newest')
+  useEffect(() => {
+    async function getCardsData() {
+      const { data } = await api.get("/arena/active/newest");
       setCardsData(data);
     }
     getCardsData();
-  },[])
+  }, []);
 
   return (
     <div>
-      {cardsData.length && cardsData.map((e,i) => (
-        <NewestCard key={i} username={e.username} domain={e.domain} title={e.title} affirmativescore={e.affirmativescore} negativescore={e.negativescore} argumentid={e.argumentid} time={timeAgo(e.time)} argumentNum={e.argumentNum} />
-      ))}
+      {cardsData.length &&
+        cardsData.map((e, i) => (
+          <NewestCard
+            key={i}
+            username={e.username}
+            domain={e.domain}
+            title={e.title}
+            affirmativescore={e.affirmativescore}
+            negativescore={e.negativescore}
+            argumentid={e.argumentid}
+            time={timeAgo(e.time)}
+            argumentNum={e.argumentNum}
+          />
+        ))}
     </div>
-  )
-}
+  );
+};
 
-export default NewestTab
+export default NewestTab;

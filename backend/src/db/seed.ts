@@ -1,5 +1,5 @@
 import pool from "./index.js";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 const seed = async () => {
   const client = await pool.connect();
@@ -13,7 +13,8 @@ const seed = async () => {
     const password = "secret";
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const usersResult = await client.query(`
+    const usersResult = await client.query(
+      `
       INSERT INTO users (name, username, email, hashed_password, role)
       VALUES
         ('Nitesh Kumar',   'nitesh_dev',    'nitesh@example.com',  $1, 'admin'),
@@ -27,7 +28,9 @@ const seed = async () => {
         ('Zara Khan',      'zara_argues',   'zara@example.com',    $1, 'user'),
         ('Baron Byte',     'byte_baron',    'byte@example.com',    $1, 'user')
       RETURNING id, username;
-    `,[hashedPassword]);
+    `,
+      [hashedPassword],
+    );
 
     await client.query(`
       INSERT INTO refresh_tokens (user_id, token, expires_at)
@@ -46,7 +49,7 @@ const seed = async () => {
 
     const users = usersResult.rows;
     console.log(`✅ Seeded ${users.length} users`);
-    
+
     // ============================================================
     // ARGUMENTS
     // ============================================================
@@ -106,9 +109,17 @@ const seed = async () => {
       RETURNING id
       `,
       [
-        users[0].id, users[1].id, users[2].id, users[3].id, users[4].id,
-        users[5].id, users[6].id, users[7].id, users[8].id, users[9].id
-      ]
+        users[0].id,
+        users[1].id,
+        users[2].id,
+        users[3].id,
+        users[4].id,
+        users[5].id,
+        users[6].id,
+        users[7].id,
+        users[8].id,
+        users[9].id,
+      ],
     );
 
     const args = argumentsResult.rows;
@@ -144,11 +155,27 @@ const seed = async () => {
       RETURNING id
       `,
       [
-        users[0].id, users[1].id, users[2].id, users[3].id, users[4].id,
-        users[5].id, users[6].id, users[7].id, users[8].id, users[9].id,
-        args[0].id,  args[1].id,  args[2].id,  args[3].id,  args[4].id,
-        args[5].id,  args[6].id,  args[7].id,  args[8].id,  args[9].id,
-      ]
+        users[0].id,
+        users[1].id,
+        users[2].id,
+        users[3].id,
+        users[4].id,
+        users[5].id,
+        users[6].id,
+        users[7].id,
+        users[8].id,
+        users[9].id,
+        args[0].id,
+        args[1].id,
+        args[2].id,
+        args[3].id,
+        args[4].id,
+        args[5].id,
+        args[6].id,
+        args[7].id,
+        args[8].id,
+        args[9].id,
+      ],
     );
 
     console.log(`✅ Seeded ${commentsResult.rows.length} comments`);

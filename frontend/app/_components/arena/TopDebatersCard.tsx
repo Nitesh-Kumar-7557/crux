@@ -15,7 +15,10 @@ const TopDebatersCard = ({
   id: number;
 }) => {
   return (
-    <Link href={`/profile/${id}`} className="flex cursor-pointer items-center gap-4 p-3 bg-surface-container-low hover:bg-surface-container-high transition-colors">
+    <Link
+      href={`/profile/${id}`}
+      className="flex cursor-pointer items-center gap-4 p-3 bg-surface-container-low hover:bg-surface-container-high transition-colors"
+    >
       <span
         className={`font-label ${rank !== 1 ? "text-outline" : "text-primary-container"} text-xs w-4`}
       >

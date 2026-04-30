@@ -1,5 +1,3 @@
-
-
 export interface ProfileData {}
 
 export interface UserHeadInfoProps {
@@ -11,22 +9,20 @@ export interface UserHeadInfoProps {
 }
 
 export interface ReputationBreakdownProps {
-    data: number[];
+  data: number[];
 }
 
-
 interface statementData {
-    id: number;
-    title: string;
+  id: number;
+  title: string;
 }
 export type ActiveStatementsProps = statementData[];
 
-
 export interface DebateHistoryProps {
-    date: string;
-    result: 'win' | 'loss';
-    inFavour: boolean;
-    title: string;
-    score: number;
-    replayLink: string;
+  date: string;
+  result: "win" | "loss";
+  inFavour: boolean;
+  title: string;
+  score: number;
+  replayLink: string;
 }

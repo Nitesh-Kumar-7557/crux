@@ -1,11 +1,11 @@
 import type { Request, Response } from "express";
-import { jsonrepair } from 'jsonrepair';
+import { jsonrepair } from "jsonrepair";
 import { groqGPT } from "../ai/groq.js";
 
 export async function checkEligibleStatement(req: Request, res: Response) {
-    const { content, domain } = req.body;
+  const { content, domain } = req.body;
 
-    const systemPrompt = `You are CRUX ARBITER — the gatekeeper of a high-stakes debate arena.
+  const systemPrompt = `You are CRUX ARBITER — the gatekeeper of a high-stakes debate arena.
 
             Your only job: decide if a statement can sustain a real fight between two equally strong sides.
 
@@ -113,28 +113,25 @@ export async function checkEligibleStatement(req: Request, res: Response) {
             "domain": "Energy Policy"
             }`;
 
-    const userPrompt = `STATEMENT: "${content}"
+  const userPrompt = `STATEMENT: "${content}"
             DOMAIN: "${domain}"
 
             Evaluate. Return raw JSON only.`;
 
+  try {
+    const data = await groqGPT(systemPrompt, userPrompt);
 
-    try {
-        const data = await groqGPT(systemPrompt, userPrompt);
+    const repaired = jsonrepair(data);
+    const parsed = JSON.parse(repaired);
 
-        const repaired = jsonrepair(data);
-        const parsed = JSON.parse(repaired);
-
-        res.status(200).json({
-            eligibility: parsed.eligibility,
-            improved:    parsed.improved,
-            feedback:    parsed.feedback,
-            keyword:     parsed.keyword,
-            domain:      parsed.domain,
-        })
-    } catch (err) {
-        console.error(err)
-    }
-
-
+    res.status(200).json({
+      eligibility: parsed.eligibility,
+      improved: parsed.improved,
+      feedback: parsed.feedback,
+      keyword: parsed.keyword,
+      domain: parsed.domain,
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }

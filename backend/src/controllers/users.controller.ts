@@ -11,7 +11,7 @@ import {
   saveRefreshTokenToDB,
 } from "../lib/tokens.js";
 
-const isProduction = config.node_env === 'production';
+const isProduction = config.node_env === "production";
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: isProduction,
@@ -61,7 +61,7 @@ export async function addNewUser(req: Request, res: Response) {
 
     res.cookie("refresh_token", refreshToken, cookieOptions);
     res.status(201).json({
-      accessToken: accessToken
+      accessToken: accessToken,
     });
   } catch (err) {
     console.error(err);
@@ -108,7 +108,7 @@ export async function loginUser(req: Request, res: Response) {
       role: user.role,
       username: user.username,
       email: user.email,
-    }
+    };
 
     const accessToken = createAccessToken(payloadData);
     const refreshToken = createRefreshToken();
@@ -160,23 +160,25 @@ export async function generateNewAccess(req: Request, res: Response) {
 export async function logoutUser(req: Request, res: Response) {
   const refreshToken = req.cookies.refresh_token;
 
-  if(refreshToken){
-    await deleteRefreshTokenFromDB(refreshToken)
+  if (refreshToken) {
+    await deleteRefreshTokenFromDB(refreshToken);
   }
 
-  res.clearCookie("refresh_token", cookieOptions)
-  res.json({message: "logged out successfully" });
-
+  res.clearCookie("refresh_token", cookieOptions);
+  res.json({ message: "logged out successfully" });
 }
 
 // loggedIn user info
 export async function getUserInfo(req: Request, res: Response) {
   try {
-    const { rows } = await pool.query(`
+    const { rows } = await pool.query(
+      `
         SELECT id, name, username, role FROM users WHERE id = $1; 
-      `,[req.user!.id])
-    res.json({user: rows[0]})
-  } catch(err){
-    res.status(500).json({ error: "failed to fetch user "})
+      `,
+      [req.user!.id],
+    );
+    res.json({ user: rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: "failed to fetch user " });
   }
 }

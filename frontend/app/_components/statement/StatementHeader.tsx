@@ -1,5 +1,3 @@
-import React from "react";
-
 const StatementHeader = () => {
   return (
     <div className="mb-12 border-l-4 border-primary pl-6">

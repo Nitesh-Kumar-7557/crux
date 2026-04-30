@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 const Argument = () => {
-  redirect('/')
-}
+  redirect("/");
+};
 
-export default Argument
+export default Argument;

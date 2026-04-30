@@ -1,11 +1,16 @@
-
 import type { UserHeadInfoProps } from "@/app/profile/types";
 import { Newsreader } from "next/font/google";
 const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const UserHeadInfo = ({name,level,description,reputation,globalRank}:UserHeadInfoProps) => {
+const UserHeadInfo = ({
+  name,
+  level,
+  description,
+  reputation,
+  globalRank,
+}: UserHeadInfoProps) => {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 md:mt-12 mb-16 items-end">
       <div className="lg:col-span-7">
@@ -17,7 +22,9 @@ const UserHeadInfo = ({name,level,description,reputation,globalRank}:UserHeadInf
             Verified Logic
           </span>
         </div>
-        <h1 className={`${newsreader.className} text-6xl md:text-8xl font-bold tracking-tighter text-on-background leading-none`}>
+        <h1
+          className={`${newsreader.className} text-6xl md:text-8xl font-bold tracking-tighter text-on-background leading-none`}
+        >
           {name}
         </h1>
         <p className="font-body text-on-surface-variant mt-6 max-w-xl text-lg leading-relaxed">

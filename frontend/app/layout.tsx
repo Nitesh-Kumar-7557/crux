@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   description: "Nitesh OP in the Chat!",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,9 +29,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background text-on-background">
-        <ConditionalLayout>
-          {children}
-        </ConditionalLayout>
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );

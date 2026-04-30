@@ -6,7 +6,11 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
-const ArgumentHeader = ({argumentHeaderData}:{argumentHeaderData: ArgumentHeaderProps}) => {
+const ArgumentHeader = ({
+  argumentHeaderData,
+}: {
+  argumentHeaderData: ArgumentHeaderProps;
+}) => {
   return (
     <div>
       <div className="flex flex-col items-start gap-4 mb-8">
@@ -21,13 +25,23 @@ const ArgumentHeader = ({argumentHeaderData}:{argumentHeaderData: ArgumentHeader
         <h1
           className={`${newsreader.className} text-5xl md:text-7xl font-bold max-w-5xl tracking-tight`}
         >
-          {argumentHeaderData.statement.split(argumentHeaderData.statementKeyword)[0]}
-          <span className="text-primary italic">{argumentHeaderData.statementKeyword}</span> 
-          {argumentHeaderData.statement.split(argumentHeaderData.statementKeyword)[1]}
+          {
+            argumentHeaderData.statement.split(
+              argumentHeaderData.statementKeyword,
+            )[0]
+          }
+          <span className="text-primary italic">
+            {argumentHeaderData.statementKeyword}
+          </span>
+          {
+            argumentHeaderData.statement.split(
+              argumentHeaderData.statementKeyword,
+            )[1]
+          }
         </h1>
       </div>
 
-      <ArgumentProbability argumentHeaderData={argumentHeaderData}/>
+      <ArgumentProbability argumentHeaderData={argumentHeaderData} />
     </div>
   );
 };

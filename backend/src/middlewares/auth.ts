@@ -41,7 +41,6 @@ export async function authMiddleware(
   }
 }
 
-
 // Optional Middleware
 export async function optionalMiddleware(
   req: Request,
@@ -52,7 +51,9 @@ export async function optionalMiddleware(
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
-    return res.status(200).json({message: "No token Provided! Going without userInfo."});
+    return res
+      .status(200)
+      .json({ message: "No token Provided! Going without userInfo." });
   }
 
   try {
@@ -71,11 +72,11 @@ export async function optionalMiddleware(
 }
 
 // Role check middleware
-export function requireRole(...roles: string[]){
-    return (req: Request, res: Response, next: NextFunction) => {
-        if(!req.user || !roles.includes(req.user.role)){
-            return res.status(403).json({ error: "access denied" })
-        }
-        next()
+export function requireRole(...roles: string[]) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "access denied" });
     }
+    next();
+  };
 }

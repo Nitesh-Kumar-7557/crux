@@ -1,43 +1,48 @@
 import type { Response, Request } from "express";
 import pool from "../db/index.js";
 
-export async function getActiveCardData(req: Request, res: Response){
-    try{
-        const argument = await pool.query(`
+export async function getActiveCardData(req: Request, res: Response) {
+  try {
+    const argument = await pool.query(`
                 SELECT id, user_id, content, domain, affirmative, negative
                 FROM arguments a
                 ORDER BY a.id DESC
                 LIMIT 1;
-            `)
-        if(argument.rows.length === 0){
-            return res.status(200).json({})
-        }
-        const user = await pool.query(`
+            `);
+    if (argument.rows.length === 0) {
+      return res.status(200).json({});
+    }
+    const user = await pool.query(
+      `
                 SELECT username FROM users WHERE id = $1;
-            `,[argument.rows[0].user_id])
-        const comments = await pool.query(`
+            `,
+      [argument.rows[0].user_id],
+    );
+    const comments = await pool.query(
+      `
                 SELECT COUNT(id) FROM comments WHERE argument_id = $1;
-            `,[argument.rows[0].id])
-    
-        res.status(200).json({
-            domain: argument.rows[0].domain,
-            argumentId: argument.rows[0].id,
-            username: user.rows[0].username,
-            content: argument.rows[0].content,
-            affirmative: argument.rows[0].affirmative,
-            negative: argument.rows[0].negative,
-            count_comments: parseInt(comments.rows[0].count),
-        })
-    }
-    catch(err){
-        console.error(err)
-        res.status(200).json({})
-    }
+            `,
+      [argument.rows[0].id],
+    );
+
+    res.status(200).json({
+      domain: argument.rows[0].domain,
+      argumentId: argument.rows[0].id,
+      username: user.rows[0].username,
+      content: argument.rows[0].content,
+      affirmative: argument.rows[0].affirmative,
+      negative: argument.rows[0].negative,
+      count_comments: parseInt(comments.rows[0].count),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(200).json({});
+  }
 }
 
-export async function getTrendingCardData(req: Request, res: Response){
-    try {
-        const argument = await pool.query(`
+export async function getTrendingCardData(req: Request, res: Response) {
+  try {
+    const argument = await pool.query(`
                 SELECT 
                     u.username,
                     a.domain,
@@ -52,22 +57,21 @@ export async function getTrendingCardData(req: Request, res: Response){
                 GROUP BY a.id, u.username, a.domain, a.content, a.affirmative, a.negative
                 ORDER BY a.id DESC
                 LIMIT 7;
-            `)
-        if(argument.rows.length === 0){
-            return res.status(200).json({})
-        }
-    
-        res.status(200).json(argument.rows)
+            `);
+    if (argument.rows.length === 0) {
+      return res.status(200).json({});
     }
-    catch(err){
-        console.error(err)
-        res.status(200).json({})
-    }
+
+    res.status(200).json(argument.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(200).json({});
+  }
 }
 
-export async function getNewestCardData(req: Request, res: Response){
-    try {
-        const argument = await pool.query(`
+export async function getNewestCardData(req: Request, res: Response) {
+  try {
+    const argument = await pool.query(`
                 SELECT 
                     u.username,
                     a.domain,
@@ -86,22 +90,21 @@ export async function getNewestCardData(req: Request, res: Response){
                 ) c ON a.id = c.argument_id
                 ORDER BY a.id DESC
                 LIMIT 20;
-            `)
-        if(argument.rows.length === 0){
-            return res.status(200).json({})
-        }
-    
-        res.status(200).json(argument.rows)
+            `);
+    if (argument.rows.length === 0) {
+      return res.status(200).json({});
     }
-    catch(err){
-        console.error(err)
-        res.status(200).json({})
-    }
+
+    res.status(200).json(argument.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(200).json({});
+  }
 }
 
-export async function getSidebarData(req: Request, res: Response){
-    try {
-        const data1 = await pool.query(`
+export async function getSidebarData(req: Request, res: Response) {
+  try {
+    const data1 = await pool.query(`
             SELECT
                 a.domain AS topic,
                 ROUND(AVG(a.affirmative - a.negative))::numeric AS "changePercentage",
@@ -112,9 +115,9 @@ export async function getSidebarData(req: Request, res: Response){
             GROUP BY a.domain
             ORDER BY arguments DESC
             LIMIT 3;
-        `)
+        `);
 
-        const data2 = await pool.query(`
+    const data2 = await pool.query(`
             SELECT 
                 u1.name,
                 u1.logic_score AS "logicScore",
@@ -127,22 +130,27 @@ export async function getSidebarData(req: Request, res: Response){
                 u1.logic_score DESC,
                 u1.id ASC
             LIMIT 3;
-        `)
-        
-        const data3 = await pool.query(`
+        `);
+
+    const data3 = await pool.query(`
                 SELECT
                     (SELECT ROUND(SUM(logic_score)::int) FROM users) AS "logicStacked",
                     (SELECT COUNT(*)::int FROM arguments) AS "activeArenas"
-            `)
+            `);
 
-        if(data1.rows.length === 0 || data2.rows.length === 0 || data3.rows.length === 0){
-            return res.status(200).json([])
-        }
+    if (
+      data1.rows.length === 0 ||
+      data2.rows.length === 0 ||
+      data3.rows.length === 0
+    ) {
+      return res.status(200).json([]);
+    }
 
-        res.status(200).json({data1: data1.rows, data2: data2.rows, data3: data3.rows})
-    }
-    catch(err){
-        console.error(err)
-        res.status(200).json([])
-    }
+    res
+      .status(200)
+      .json({ data1: data1.rows, data2: data2.rows, data3: data3.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(200).json([]);
+  }
 }

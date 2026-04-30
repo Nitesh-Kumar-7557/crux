@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 const Profile = () => {
-  redirect('/')
-}
+  redirect("/");
+};
 
-export default Profile
+export default Profile;

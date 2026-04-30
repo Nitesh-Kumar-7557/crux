@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import api from "@/app/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,17 +9,16 @@ import { LuLockKeyhole, LuUser } from "react-icons/lu";
 import { MdOutlineEmail, MdOutlineVerifiedUser } from "react-icons/md";
 
 const Register = () => {
-
-  const [name,setName] = useState<string>('')
-  const [userName,setUserName] = useState<string>('')
-  const [email,setEmail] = useState<string>('')
-  const [password,setPassword] = useState<string>('')
+  const [name, setName] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const [error, setError] = useState("");
 
   const router = useRouter();
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     const info = {
@@ -37,7 +36,6 @@ const Register = () => {
     } catch (err: any) {
       setError(err.response?.data?.error || "Something went wrong");
     }
-
   }
 
   return (
@@ -46,7 +44,7 @@ const Register = () => {
         {/* <!-- Background Technical Layer --> */}
         <div className="absolute inset-0 technical-grid -z-5"></div>
         <div className="absolute inset-0 bg-radial-at-c from-primary/5 via-transparent to-transparent -z-5"></div>
-        
+
         <div className="w-full max-w-5xl grid md:grid-cols-12 gap-0 border border-outline-variant/15 shadow-2xl shadow-primary/5 bg-surface-container-lowest">
           <div className="md:col-span-7 p-10 md:p-16 flex flex-col justify-center">
             <div className="mb-12">
@@ -76,7 +74,7 @@ const Register = () => {
                     required={true}
                     type="text"
                     value={name}
-                    onChange={(e)=> setName(e.currentTarget.value)}
+                    onChange={(e) => setName(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -98,7 +96,7 @@ const Register = () => {
                     required={true}
                     type="text"
                     value={userName}
-                    onChange={(e)=> setUserName(e.currentTarget.value)}
+                    onChange={(e) => setUserName(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -120,7 +118,7 @@ const Register = () => {
                     required={true}
                     type="email"
                     value={email}
-                    onChange={(e)=> setEmail(e.currentTarget.value)}
+                    onChange={(e) => setEmail(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -144,11 +142,13 @@ const Register = () => {
                     required={true}
                     type="password"
                     value={password}
-                    onChange={(e)=> setPassword(e.currentTarget.value)}
+                    onChange={(e) => setPassword(e.currentTarget.value)}
                   />
                 </div>
                 <div className="flex justify-between">
-                  <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">{error}</p>
+                  <p className="font-label text-[10px] uppercase tracking-widest text-secondary cursor-default">
+                    {error}
+                  </p>
                   <a
                     className="font-label text-[10px] uppercase tracking-widest text-primary hover:underline decoration-primary transition-all"
                     href="#"
@@ -169,7 +169,6 @@ const Register = () => {
                   </span>
                 </button>
               </div>
-
             </form>
             <p className="mt-8 text-outline text-xs font-body">
               By entering the arena, you agree to the{" "}
