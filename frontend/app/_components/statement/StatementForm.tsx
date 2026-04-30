@@ -87,9 +87,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   }
 
 	const requestInProccess = useRef<boolean>(false);
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-
+  async function handleSubmit() {
 		if (requestInProccess.current) return;
 		requestInProccess.current = true;
 		
@@ -108,13 +106,15 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 			content_keyword: formState.keyword,
 			domain: formState.domain,
 		});
-		
+
     router.push("/");
   }
 
+	const isEligible = formState.eligibility === "pass";
+
   return (
     <div className="bg-surface-container-low p-8 relative overflow-hidden">
-      <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+      <form className="space-y-8 relative z-10">
         {/* <!-- Category Selection --> */}
         <div className="space-y-3">
           <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
@@ -178,33 +178,21 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
               ARBITER STANDING BY
             </span>
           </div>
-          {formState.eligibility === "pass" && (
-            <button
-              className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-              type="submit"
-            >
-              Broadcast Statement
-              <span className="material-symbols-outlined text-lg">
-                <MdSensors />
-              </span>
-            </button>
-          )}
-          {formState.eligibility !== "pass" && (
-            <button
-              onClick={checkEligibility}
-              className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-              type="button"
-            >
-              Check eligibility
-              {formState.loading ? (
-                <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span>
-              ) : (
-                <span className="material-symbols-outlined text-lg">
-                  <RiRobot3Line />
-                </span>
-              )}
-            </button>
-          )}
+          <button
+						className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+						type="button"
+						onClick={() => (isEligible ? handleSubmit : checkEligibility)()}
+					>
+						{ isEligible ? "Broadcast Statement" : "Check eligibility" }
+
+						{
+							formState.loading
+								? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span>
+								: <span className="material-symbols-outlined text-lg">
+										{ isEligible ? <MdSensors /> : <RiRobot3Line /> }
+									</span>
+						}
+					</button>
         </div>
       </form>
       {formState.eligibility && (
