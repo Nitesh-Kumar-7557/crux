@@ -151,7 +151,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 						maxLength={MAXIMUM_CHAR_LIMIT}
             onChange={(e) => {
 							if (formState.allowInput)
-								updateFormState({ text: e.target.value });
+								updateFormState({ text: e.target.value, eligibility: "" });
 						}}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
@@ -179,7 +179,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             </span>
           </div>
           <button
-						className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+						className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
 						type="button"
 						onClick={() => (isEligible ? handleSubmit : checkEligibility)()}
 					>
