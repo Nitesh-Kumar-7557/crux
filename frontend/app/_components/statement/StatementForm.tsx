@@ -60,16 +60,20 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 		}));
 	}
 
+	const requestInProccess = useRef<boolean>(false);
+
   async function checkEligibility() {
-		if (!isTextInLimits())
+		if (!isTextInLimits() || requestInProccess.current)
 			return;
 
+		requestInProccess.current = true;
+		
 		updateFormState({
 			loading: true,
 			allowInput: false,
 			eligibility: "pending",
 		});
-
+		
     const { data } = await api.post("/ai/statement", {
 			content: formState.text,
 			domain: formState.selectedDomain,
@@ -84,18 +88,19 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 			domain: data.domain,
 			feedback: data.feedback,
 		});
+
+		requestInProccess.current = false;
   }
 
-	const requestInProccess = useRef<boolean>(false);
   async function handleSubmit() {
 		if (requestInProccess.current) return;
 		requestInProccess.current = true;
 		
-		updateFormState({ loading: true });
+		updateFormState({ loading: true, allowInput: false });
 
     const user = await useUser();
 		if (!user) {
-			updateFormState({ loading: false });
+			updateFormState({ loading: false, allowInput: true });
 			requestInProccess.current = false;
 			return;
 		}
