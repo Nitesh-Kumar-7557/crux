@@ -31,6 +31,8 @@ interface FormState {
 	feedback: string;
 };
 
+const MINIMUM_CHAR_LIMIT = 35;
+
 const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const router = useRouter();
   const userPromise: Promise<jwtPayload | null> = useUser();
@@ -55,6 +57,9 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 	}
 
   async function checkEligibility() {
+		if (formState.text.length < MINIMUM_CHAR_LIMIT)
+			return;
+
 		updateFormState({
 			loading: true,
 			allowInput: false,
@@ -131,7 +136,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 						}}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
-            <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM 35 CHARACTERS</span>
+            <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM {MINIMUM_CHAR_LIMIT} CHARACTERS</span>
             <span>{formState.text.length} / 120</span>
           </div>
         </div>
@@ -156,7 +161,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           </div>
           {formState.eligibility === "pass" && (
             <button
-              className={`${formState.text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
               type="submit"
             >
               Broadcast Statement
@@ -167,10 +172,8 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           )}
           {formState.eligibility !== "pass" && (
             <button
-              onClick={() => {
-                if (formState.text.length > 35) checkEligibility();
-              }}
-              className={`${formState.text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              onClick={checkEligibility}
+              className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
               type="button"
             >
               Check eligibility
