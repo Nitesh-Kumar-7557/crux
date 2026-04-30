@@ -1,6 +1,6 @@
 "use client";
 import { DomainClassification } from "@/app/statement/types";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   MdEditNote,
   MdFilterList,
@@ -32,10 +32,14 @@ interface FormState {
 };
 
 const MINIMUM_CHAR_LIMIT = 35;
+const MAXIMUM_CHAR_LIMIT = 120;
 
 const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const router = useRouter();
-  const userPromise: Promise<jwtPayload | null> = useUser();
+
+	function isTextInLimits() {
+		return formState.text.length >= MINIMUM_CHAR_LIMIT && formState.text.length <= MAXIMUM_CHAR_LIMIT;
+	}
 
   const [formState, setFormState] = useState<FormState>({
 		loading: false,
@@ -57,7 +61,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 	}
 
   async function checkEligibility() {
-		if (formState.text.length < MINIMUM_CHAR_LIMIT)
+		if (!isTextInLimits())
 			return;
 
 		updateFormState({
@@ -82,15 +86,29 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 		});
   }
 
+	const requestInProccess = useRef<boolean>(false);
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    const user = await userPromise;
+
+		if (requestInProccess.current) return;
+		requestInProccess.current = true;
+		
+		updateFormState({ loading: true });
+
+    const user = await useUser();
+		if (!user) {
+			updateFormState({ loading: false });
+			requestInProccess.current = false;
+			return;
+		}
+
     await api.post("/argument", {
-			user_id: user?.id,
+			user_id: user.id,
 			content: formState.text,
 			content_keyword: formState.keyword,
 			domain: formState.domain,
 		});
+		
     router.push("/");
   }
 
@@ -130,6 +148,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-600 text-on-surface resize-none`}
             placeholder="Make a claim worth fighting over..."
             value={formState.text}
+						maxLength={MAXIMUM_CHAR_LIMIT}
             onChange={(e) => {
 							if (formState.allowInput)
 								updateFormState({ text: e.target.value });
@@ -137,7 +156,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
             <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM {MINIMUM_CHAR_LIMIT} CHARACTERS</span>
-            <span>{formState.text.length} / 120</span>
+            <span>{formState.text.length} / {MAXIMUM_CHAR_LIMIT}</span>
           </div>
         </div>
         {/* <!-- Action Bar --> */}
@@ -161,7 +180,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           </div>
           {formState.eligibility === "pass" && (
             <button
-              className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
               type="submit"
             >
               Broadcast Statement
@@ -173,7 +192,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           {formState.eligibility !== "pass" && (
             <button
               onClick={checkEligibility}
-              className={`${formState.text.length > MINIMUM_CHAR_LIMIT ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+              className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
               type="button"
             >
               Check eligibility
