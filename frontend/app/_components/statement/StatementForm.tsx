@@ -1,6 +1,6 @@
 "use client";
 import { DomainClassification } from "@/app/statement/types";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   MdEditNote,
   MdFilterList,
@@ -20,52 +20,106 @@ const newsreader = Newsreader({
   subsets: ["latin"],
 });
 
+interface FormState {
+	text: string;
+	allowInput: boolean;
+	selectedDomain: string;
+	keyword: string;
+	loading: boolean;
+	eligibility: string;
+	domain: string;
+	feedback: string;
+};
+
+const MINIMUM_CHAR_LIMIT = 35;
+const MAXIMUM_CHAR_LIMIT = 120;
+
 const StatementForm = ({ domains }: { domains: DomainClassification }) => {
   const router = useRouter();
-  const userPromise: Promise<jwtPayload | null> = useUser();
 
-  const [text, setText] = useState("");
-  const [allowInput, setAllowInput] = useState(true);
-  const [selectedDomain, setSelectedDomain] = useState("AI");
-  const [keyword, setKeyword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [eligibility, setEligibility] = useState("");
-  const [domain, setDomain] = useState("");
-  const [feedback, setFeedback] = useState(
-    "Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.",
-  );
+	function isTextInLimits() {
+		return formState.text.length >= MINIMUM_CHAR_LIMIT && formState.text.length <= MAXIMUM_CHAR_LIMIT;
+	}
+
+  const [formState, setFormState] = useState<FormState>({
+		loading: false,
+		text: "",
+		allowInput: true,
+		selectedDomain: "AI",
+		keyword: "",
+		eligibility: "",
+		domain: "",
+		feedback:
+			"Crux AI is analyzing the semantic integrity of your thesis. Ensure your statement is falsifiable and free of ad hominem triggers for optimal Arena placement.",
+	});
+
+	function updateFormState(updates: Partial<FormState>) {
+		setFormState((pFormState) => ({
+			...pFormState,
+			...updates,
+		}));
+	}
+
+	const requestInProccess = useRef<boolean>(false);
 
   async function checkEligibility() {
-    setLoading(true);
-    setEligibility("pending");
+		if (!isTextInLimits() || requestInProccess.current)
+			return;
+
+		requestInProccess.current = true;
+		
+		updateFormState({
+			loading: true,
+			allowInput: false,
+			eligibility: "pending",
+		});
+		
     const { data } = await api.post("/ai/statement", {
-      content: text,
-      domain: selectedDomain,
-    });
-    setEligibility(data.eligibility);
-    setKeyword(data.keyword);
-    setFeedback(data.feedback);
-    setText(data.improved);
-    setAllowInput(false);
-    setDomain(data.domain);
-    setLoading(false);
+			content: formState.text,
+			domain: formState.selectedDomain,
+		});
+
+    updateFormState({
+			loading: false,
+			text: data.improved,
+			allowInput: true,
+			keyword: data.keyword,
+			eligibility: data.eligibility,
+			domain: data.domain,
+			feedback: data.feedback,
+		});
+
+		requestInProccess.current = false;
   }
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const user = await userPromise;
+  async function handleSubmit() {
+		if (requestInProccess.current) return;
+		requestInProccess.current = true;
+		
+		updateFormState({ loading: true, allowInput: false });
+
+    const user = await useUser();
+		if (!user) {
+			updateFormState({ loading: false, allowInput: true });
+			requestInProccess.current = false;
+			return;
+		}
+
     await api.post("/argument", {
-      user_id: user?.id,
-      content: text,
-      content_keyword: keyword,
-      domain: domain,
-    });
+			user_id: user.id,
+			content: formState.text,
+			content_keyword: formState.keyword,
+			domain: formState.domain,
+		});
+
     router.push("/");
   }
 
+	const isEligible = formState.eligibility === "pass";
+
   return (
     <div className="bg-surface-container-low p-8 relative overflow-hidden">
-      <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+      <form className="space-y-8 relative z-10">
         {/* <!-- Category Selection --> */}
         <div className="space-y-3">
           <label className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
@@ -75,14 +129,14 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
             SELECT YOUR BATTLEGROUND
           </label>
           <div className=" flex flex-wrap gap-2">
-            {domains.map((e, i) => (
+            {domains.map((domainName, i) => (
               <button
                 key={i}
-                className={`${selectedDomain === e ? "border-primary text-primary bg-primary/5" : "border-outline-variant bg-surface-container"} cursor-pointer border px-4 py-2 font-label text-xs uppercase hover:border-primary hover:text-primary transition-colors `}
+                className={`${formState.selectedDomain === domainName ? "border-primary text-primary bg-primary/5" : "border-outline-variant bg-surface-container"} cursor-pointer border px-4 py-2 font-label text-xs uppercase hover:border-primary hover:text-primary transition-colors `}
                 type="button"
-                onClick={() => setSelectedDomain(e)}
+                onClick={() => updateFormState({ selectedDomain: domainName })}
               >
-                {e}
+                {domainName}
               </button>
             ))}
           </div>
@@ -98,14 +152,16 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
           <textarea
             className={`w-full focus:outline-none bg-surface-container-highest border-0 focus:ring-1 focus:ring-primary min-h-60 p-6 ${newsreader.className} text-2xl italic placeholder:text-neutral-600 text-on-surface resize-none`}
             placeholder="Make a claim worth fighting over..."
-            value={text}
+            value={formState.text}
+						maxLength={MAXIMUM_CHAR_LIMIT}
             onChange={(e) => {
-              allowInput && setText(e.target.value);
-            }}
+							if (formState.allowInput)
+								updateFormState({ text: e.target.value, eligibility: "" });
+						}}
           ></textarea>
           <div className="flex justify-between items-center text-[10px] font-label text-neutral-500 uppercase tracking-tighter">
-            <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM 35 CHARACTERS</span>
-            <span>{text.length} / 120</span>
+            <span>THE ARBITER REQUIRES SUBSTANCE — MINIMUM {MINIMUM_CHAR_LIMIT} CHARACTERS</span>
+            <span>{formState.text.length} / {MAXIMUM_CHAR_LIMIT}</span>
           </div>
         </div>
         {/* <!-- Action Bar --> */}
@@ -127,38 +183,24 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
               ARBITER STANDING BY
             </span>
           </div>
-          {eligibility === "pass" && (
-            <button
-              className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-              type="submit"
-            >
-              Broadcast Statement
-              <span className="material-symbols-outlined text-lg">
-                <MdSensors />
-              </span>
-            </button>
-          )}
-          {eligibility !== "pass" && (
-            <button
-              onClick={() => {
-                if (text.length > 35) checkEligibility();
-              }}
-              className={`${text.length > 35 ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
-              type="button"
-            >
-              Check eligibility
-              {loading || eligibility === "pending" ? (
-                <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span>
-              ) : (
-                <span className="material-symbols-outlined text-lg">
-                  <RiRobot3Line />
-                </span>
-              )}
-            </button>
-          )}
+          <button
+						className={`${isTextInLimits() ? "cursor-pointer hover:bg-primary-container bg-primary" : "disabled bg-primary cursor-not-allowed"} w-full md:w-auto  text-on-primary font-label text-sm uppercase tracking-[0.2em] px-12 py-4 transition-all active:scale-95 flex items-center justify-center gap-3`}
+						type="button"
+						onClick={() => (isEligible ? handleSubmit : checkEligibility)()}
+					>
+						{ isEligible ? "Broadcast Statement" : "Check eligibility" }
+
+						{
+							formState.loading
+								? <span className="border-t-2 border-black h-4 w-4 rounded-full animate-spin"></span>
+								: <span className="material-symbols-outlined text-lg">
+										{ isEligible ? <MdSensors /> : <RiRobot3Line /> }
+									</span>
+						}
+					</button>
         </div>
       </form>
-      {eligibility && (
+      {formState.eligibility && (
         <div className="bg-surface-container-high border mt-6 border-outline-variant/50 p-6 relative overflow-hidden">
           <div className="relative z-10 flex flex-col gap-4">
             <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-outline-variant/30 pb-4">
@@ -173,7 +215,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
                 <span className="font-label text-[10px] uppercase tracking-widest text-primary">
-                  Eligibility: {eligibility}
+                  Eligibility: {formState.eligibility}
                 </span>
               </div>
             </div>
@@ -183,7 +225,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
                   <MdMemory />
                 </span>
                 <p className="font-label text-xs text-on-surface-variant leading-relaxed">
-                  {feedback}
+                  {formState.feedback}
                 </p>
               </div>
             </div>
