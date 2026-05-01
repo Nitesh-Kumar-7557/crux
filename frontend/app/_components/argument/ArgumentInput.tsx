@@ -1,6 +1,6 @@
 "use client";
 
-import { getUser } from "@/app/_utils/useUser";
+import { getUser } from "@/app/_utils/getUser";
 import { jwtPayload } from "@/app/_types/jwt";
 import api from "@/app/axios";
 import Link from "next/link";

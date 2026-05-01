@@ -1,7 +1,7 @@
 "use client";
 import TheCaseFor from "./TheCaseFor";
 import TheCaseAgainst from "./TheCaseAgainst";
-import { getUser } from "@/app/_utils/useUser";
+import { getUser } from "@/app/_utils/getUser";
 import { useEffect, useState } from "react";
 
 function convertLogicScore(score: number) {

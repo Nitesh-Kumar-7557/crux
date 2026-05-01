@@ -1,5 +1,5 @@
 "use client";
-import { getUser } from "@/app/_utils/useUser";
+import { getUser } from "@/app/_utils/getUser";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
 import { useEffect, useState } from "react";

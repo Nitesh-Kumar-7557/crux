@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
-import { getUser } from "../_utils/useUser";
+import { getUser } from "../_utils/getUser";
 import { useEffect, useState } from "react";
 
 const navLinks = [

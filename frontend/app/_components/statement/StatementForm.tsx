@@ -11,7 +11,7 @@ import {
 
 import { Newsreader } from "next/font/google";
 import { TbGavel } from "react-icons/tb";
-import { getUser } from "@/app/_utils/useUser";
+import { getUser } from "@/app/_utils/getUser";
 import { useRouter } from "next/navigation";
 import api from "@/app/axios";
 import { RiRobot3Line } from "react-icons/ri";
