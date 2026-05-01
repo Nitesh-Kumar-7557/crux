@@ -1,7 +1,7 @@
 "use client";
 import TheCaseFor from "./TheCaseFor";
 import TheCaseAgainst from "./TheCaseAgainst";
-import { useUser } from "@/app/_hooks/useUser";
+import { getUser } from "@/app/_utils/useUser";
 import { useEffect, useState } from "react";
 
 function convertLogicScore(score: number) {
@@ -42,7 +42,7 @@ const ArgumentArena = ({
   const [user, setUser] = useState<any>(null);
   useEffect(() => {
     async function fetchUser() {
-      const userInfo = await useUser();
+      const userInfo = await getUser();
       setUser(userInfo);
     }
     fetchUser();

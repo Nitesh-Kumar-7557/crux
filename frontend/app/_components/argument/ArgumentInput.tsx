@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@/app/_hooks/useUser";
+import { getUser } from "@/app/_utils/useUser";
 import { jwtPayload } from "@/app/_types/jwt";
 import api from "@/app/axios";
 import Link from "next/link";
@@ -19,7 +19,7 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
 
   useEffect(() => {
     async function fetchUser() {
-      const userInfo = await useUser();
+      const userInfo = await getUser();
       setUser(userInfo);
     }
     fetchUser();

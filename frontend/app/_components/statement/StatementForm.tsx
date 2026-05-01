@@ -11,7 +11,7 @@ import {
 
 import { Newsreader } from "next/font/google";
 import { TbGavel } from "react-icons/tb";
-import { useUser } from "@/app/_hooks/useUser";
+import { getUser } from "@/app/_utils/useUser";
 import { useRouter } from "next/navigation";
 import api from "@/app/axios";
 import { RiRobot3Line } from "react-icons/ri";
@@ -98,7 +98,7 @@ const StatementForm = ({ domains }: { domains: DomainClassification }) => {
 		
 		updateFormState({ loading: true, allowInput: false });
 
-    const user = await useUser();
+    const user = await getUser();
 		if (!user) {
 			updateFormState({ loading: false, allowInput: true });
 			requestInProccess.current = false;

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
-import { useUser } from "../_hooks/useUser";
+import { getUser } from "../_utils/useUser";
 import { useEffect, useState } from "react";
 
 const navLinks = [
@@ -15,7 +15,7 @@ const Navbar = () => {
   const [user, setUser] = useState<any>(null);
   useEffect(() => {
     async function fetchUser() {
-      const userInfo = await useUser();
+      const userInfo = await getUser();
       setUser(userInfo);
     }
     fetchUser();
