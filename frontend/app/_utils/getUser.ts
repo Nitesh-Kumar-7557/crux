@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { jwtPayload } from "../_types/jwt";
 import axios from "axios";
 
-export const useUser = async () => {
+export const getUser = async () => {
   if (typeof window === "undefined") return null;
   let token = localStorage.getItem("access_token");
 

@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/app/_hooks/useUser";
+import { getUser } from "@/app/_utils/getUser";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ const ThesisCard = () => {
   const [user, setUser] = useState<any>(null);
   useEffect(() => {
     async function fetchUser() {
-      const userInfo = await useUser();
+      const userInfo = await getUser();
       setUser(userInfo);
     }
     fetchUser();
