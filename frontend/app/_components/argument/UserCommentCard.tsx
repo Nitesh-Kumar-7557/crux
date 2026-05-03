@@ -24,7 +24,15 @@ const UserArgumentCard = ({
     if (!liked) {
       setLikeCount((e) => e + 1);
       if (user_id) {
-        await api.post("/like", { user_id, comment_id, post_user_id });
+        await api.post(
+          "/like",
+          { comment_id },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          },
+        );
       }
     } else {
       setLikeCount((e) => e - 1);

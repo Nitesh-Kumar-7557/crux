@@ -2,9 +2,25 @@ import type { Request, Response } from "express";
 import pool from "../db/index.js";
 
 export async function registerLike(req: Request, res: Response) {
-  const { user_id, comment_id, post_user_id } = req.body;
+  const { comment_id } = req.body;
+  const user_id = req.user?.id;
+
+  if (!user_id) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   try {
+    const { rows: commentRows } = await pool.query(
+      `SELECT user_id FROM comments WHERE id = $1`,
+      [comment_id]
+    );
+
+    if (commentRows.length === 0) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    const post_user_id = commentRows[0].user_id;
+
     const { rows } = await pool.query(
       `
                 SELECT id FROM likes
@@ -39,6 +55,6 @@ export async function registerLike(req: Request, res: Response) {
     );
     res.status(201).json({ message: "Successful!" });
   } catch (err) {
-    res.json(500).json({ error: "Internal DB Error!" });
+    res.status(500).json({ error: "Internal DB Error!" });
   }
 }
