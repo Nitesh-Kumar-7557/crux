@@ -60,30 +60,22 @@ const ArgumentArena = ({
       likes: number;
       post_user_id: number;
     }) => {
+      const logicStats = convertLogicScore(e.logic_score);
+      const arenaComment = {
+        side: e.side,
+        reputation: logicStats.reputation,
+        username: e.username,
+        grade: logicStats.grade,
+        comment: e.content,
+        likes: e.likes,
+        user_id: user?.id,
+        comment_id: e.comment_id,
+        post_user_id: e.post_user_id,
+      };
       if (e.side === "for") {
-        forCaseComments.push({
-          side: "for",
-          reputation: convertLogicScore(e.logic_score).reputation,
-          username: e.username,
-          grade: convertLogicScore(e.logic_score).grade,
-          comment: e.content,
-          likes: e.likes,
-          user_id: user?.id,
-          comment_id: e.comment_id,
-          post_user_id: e.post_user_id,
-        });
+        forCaseComments.push(arenaComment);
       } else {
-        againstCaseComments.push({
-          side: "against",
-          reputation: convertLogicScore(e.logic_score).reputation,
-          username: e.username,
-          grade: convertLogicScore(e.logic_score).grade,
-          comment: e.content,
-          likes: e.likes,
-          user_id: user?.id,
-          comment_id: e.comment_id,
-          post_user_id: e.post_user_id,
-        });
+        againstCaseComments.push(arenaComment);
       }
     },
   );
