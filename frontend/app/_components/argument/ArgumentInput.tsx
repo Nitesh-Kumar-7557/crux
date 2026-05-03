@@ -28,22 +28,9 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
 
   if (!mounted || !user) return null;
 
-  async function handleAffirmativeBtn() {
+  async function handleBtn(side: string) {
     if (input.length === 0) return;
-    const { data } = await api.post(`/comment/affirmative/${argumentId}`, {
-      userId: user?.id,
-      input,
-    });
-    setInput("");
-    if (data.abused) {
-      setWarning(true);
-    } else {
-      router.refresh();
-    }
-  }
-  async function handleNegativeBtn() {
-    if (input.length === 0) return;
-    const { data } = await api.post(`/comment/negative/${argumentId}`, {
+    const { data } = await api.post(`/comment/${side}/${argumentId}`, {
       userId: user?.id,
       input,
     });
@@ -68,13 +55,13 @@ const ArgumentInput = ({ argumentId }: { argumentId: number }) => {
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <button
-            onClick={handleAffirmativeBtn}
+            onClick={() => handleBtn("affirmative")}
             className="flex-1 cursor-pointer md:flex-none border border-primary text-primary hover:bg-primary/10 px-8 py-4 font-label uppercase tracking-widest text-xs transition-all"
           >
             Support Affirmative
           </button>
           <button
-            onClick={handleNegativeBtn}
+            onClick={() => handleBtn("negative")}
             className="flex-1 cursor-pointer md:flex-none border border-secondary text-secondary hover:bg-secondary/10 px-8 py-4 font-label uppercase tracking-widest text-xs transition-all"
           >
             Support Negative
